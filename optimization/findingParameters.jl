@@ -1,4 +1,4 @@
-using NPZ, Random, Distributions, LinearAlgebra, Permutations, Plots, JLD2, Statistics, DelimitedFiles, Dierckx
+using NPZ, Random, Distributions, LinearAlgebra, Permutations, Plots, JLD2, Statistics, DelimitedFiles, Interpolations, QuadGK
 
 # LOAD DATA 
 function load_fMRI_data(subjects, thresholds)
@@ -44,6 +44,7 @@ function compute_quantiles(average_deg_all, clustering_all, path_len_all, temp_c
     return average_deg_quantile, clustering_quantile, path_len_quantile, small_world_quantile, small_world_SB_quantile, temp_clustering_quantile
 end
 
+# LOAD DATA HYPERBOLIC
 function load_hyperbolic_data(len_R=length(Rrange))
     αrange = collect(0.5:0.025:1.2)
     velocities = collect(0.1:0.1:0.9)
@@ -67,21 +68,46 @@ function load_hyperbolic_data(len_R=length(Rrange))
     return average_deg_HY, clustering_HY, path_len_HY, temp_clustering_HY, small_world_HY, small_world_SB_HY
 end
 
-function compute_integral(variable_fMRI, variable_HY, len_vel=length(velocities), len_α=length(αrange))
+#COMPUTE INTEGRAL DISTANCE HYPERBOLIC AND DATA CURVES
+function compute_integral_hyperbolic(average_deg_quantile, average_deg_HY, variable_fMRI, variable_HY, len_vel=length(velocities), len_α=length(αrange))
     integral = zeros(len_vel, len_α)
-
-
+    range = collect(10:0.2:150)
+    for a in 1:len_α
+        for i in 1:len_vel
+            spline = linear_interpolation(sort(average_deg_HY[i, :, a]), variable_HY[i, sortperm(average_deg_HY[i, :, a]), a])
+            spline_fMRI = linear_interpolation(sort(average_deg_quantile), variable_fMRI[2, sortperm(average_deg_quantile)])
+            diffmy = abs.(spline(range) .- spline_fMRI(range))
+            diffspline = linear_interpolation(range, diffmy)
+            integral[i, a], _ = quadgk(diffspline, range[1], range[2])
+        end
+    end
+    return integral
 end
 
+
+function find_minima_α_v(integral, αrange=collect(0.5:0.025:1.2), velocities=collect(0.1:0.1:0.9))
+    minimum_area = minimum(integral)
+    indices = argmin(integral)
+    best_velocity = velocities[indices[1]]
+    best_α = αrange[indices[2]]
+    return minimum_area, best_velocity, best_α, indices
+end
 
 function main()
     thresholds = append!(collect(0.2:0.05:0.90), collect(0.92:0.02:0.98))
     subjects = readdlm("TemporalBrainNetworksCode/src/filtered-subjects-mod.txt", Int)
-    Rrange=collect(0.5:0.5:14)
+    Rrange = collect(0.5:0.5:14)
     average_deg_all, clustering_all, path_len_all, temp_clustering_all = load_fMRI_data(subjects, thresholds)
     average_deg_quantile, clustering_quantile, path_len_quantile, small_world_quantile, small_world_SB_quantile, temp_clustering_quantile = compute_quantiles(average_deg_all, clustering_all, path_len_all, temp_clustering_all, thresholds)
-    average_deg_HY, clustering_HY, path_len_HY, temp_clustering_HY, small_world_HY, small_world_SB_HY = load_hyperbolic_data()
-
-    p = plot(average_deg_quantile, small_world_quantile[2, :], label="Real data 1050 Schaefer", lw=3)
-    plot!(average_deg_HY[1,:,1], small_world_HY[1, :,1], label="", lw=3, ls=:dash)
+    len_R = length(Rrange)
+    velocities = collect(0.1:0.1:0.9)
+    αrange = collect(0.5:0.025:1.2)
+    average_deg_HY, clustering_HY, path_len_HY, temp_clustering_HY, small_world_HY, small_world_SB_HY = load_hyperbolic_data(len_R)
+    integral = compute_integral_hyperbolic_inter(average_deg_quantile, average_deg_HY, small_world_quantile, small_world_HY, length(velocities), length(αrange))
+    minimum_area, best_velocity, best_α, indices = find_minima_α_v(integral, αrange, velocities)
+    println("Minimum area: ", minimum_area)
+    println("Best velocity: ", best_velocity)
+    println("Best α: ", best_α)
 end
+
+main()
