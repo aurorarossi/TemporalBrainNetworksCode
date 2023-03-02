@@ -84,6 +84,35 @@ function compute_integral_hyperbolic(average_deg_quantile, average_deg_HY, varia
     return integral
 end
 
+function load_euclidean_data()
+    @load "/user/aurossi/home/mri_networks/hyperbolicbrains/optimization/euclidean_300_thre_02_005_098.jld2" avEU clEU plEU tccEU
+    return avEU, clEU, plEU, tccEU
+end
+
+function load_euclideanBorder_data()
+    @load "/user/aurossi/home/mri_networks/hyperbolicbrains/optimization/euclideanBorder_300_r_0_005_08.jld2" avEU clEU plEU tccEU
+    return avEU, clEU, plEU, tccEU
+end
+
+function compute_integral_euclidean(average_deg_quantile, variable_fMRI, average_deg_EU, variable_EU, len_vel, len_thre)
+    integral_euclidean = zeros(len_vel)
+    range = collect(10:0.2:150)
+    for i in 1:len_vel
+        spline = linear_interpolation(sort(average_deg_EU[i, :]), variable_EU[i, sortperm(average_deg_EU[i, :])])
+        spline_fMRI = linear_interpolation(sort(average_deg_quantile), variable_fMRI[2, sortperm(average_deg_quantile)])
+        diffmy = abs.(spline(range) .- spline_fMRI(range))
+        diffspline = linear_interpolation(range, diffmy)
+        integral_euclidean[i], _ = quadgk(diffspline, range[1], range[2])
+    end
+    return integral_euclidean
+end
+
+function find_minimum_v(integral, velocities)
+    minimum_area = minimum(integral)
+    indices = argmin(integral)
+    best_velocity = velocities[indices]
+    return minimum_area, best_velocity, indices
+end
 
 function find_minima_α_v(integral, αrange=collect(0.5:0.025:1.2), velocities=collect(0.1:0.1:0.9))
     minimum_area = minimum(integral)
@@ -103,11 +132,28 @@ function main()
     velocities = collect(0.1:0.1:0.9)
     αrange = collect(0.5:0.025:1.2)
     average_deg_HY, clustering_HY, path_len_HY, temp_clustering_HY, small_world_HY, small_world_SB_HY = load_hyperbolic_data(len_R)
-    integral = compute_integral_hyperbolic_inter(average_deg_quantile, average_deg_HY, small_world_quantile, small_world_HY, length(velocities), length(αrange))
+    integral = compute_integral_hyperbolic(average_deg_quantile, average_deg_HY, small_world_quantile, small_world_HY, length(velocities), length(αrange))
     minimum_area, best_velocity, best_α, indices = find_minima_α_v(integral, αrange, velocities)
     println("Minimum area: ", minimum_area)
     println("Best velocity: ", best_velocity)
     println("Best α: ", best_α)
+    println("Indices: ", indices)
+    avEU, clEU, plEU, tccEU = load_euclidean_data()
+    avEUb, clEUb, plEUb, tccEUb = load_euclideanBorder_data()
+    integral_euclidean = compute_integral_euclidean(average_deg_quantile, small_world_quantile, avEU, clEU./plEU, length(velocities), length(thresholds))
+    integral_euclidean_border = compute_integral_euclidean(average_deg_quantile, small_world_quantile, avEUb, clEUb./plEUb, length(velocities), length(thresholds))
+    minimum_area, best_velocity, indices = find_minimum_v(integral_euclidean, velocities)
+    println("Minimum area euclidean: ", minimum_area)
+    println("Best velocity euclidean: ", best_velocity)
+    println("Indices euclidean: ", indices)
+    minimum_area, best_velocity, indices = find_minimum_v(integral_euclidean_border, velocities)    
+    println("Minimum area euclidean border: ", minimum_area)
+    println("Best velocity euclidean border: ", best_velocity)
+    println("Indices euclidean border: ", indices)
+
 end
+#CHANGE AND COMPUTE ONLY THINGS FOR SW
+
+
 
 main()
