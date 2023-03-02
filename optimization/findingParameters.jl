@@ -20,6 +20,7 @@ function load_fMRI_data(subjects, thresholds)
     return average_deg_all, clustering_all, path_len_all, temp_clustering_all
 end
 
+# INITIALIZE AND COMPUTE QUANTILES
 function my_quantile(len_thre, variable)
     quantile_variable = zeros(3, len_thre)
     for j in 1:len_thre
@@ -71,7 +72,7 @@ end
 #COMPUTE INTEGRAL DISTANCE HYPERBOLIC AND DATA CURVES
 function compute_integral_hyperbolic(average_deg_quantile, average_deg_HY, variable_fMRI, variable_HY, len_vel=length(velocities), len_α=length(αrange))
     integral = zeros(len_vel, len_α)
-    range = collect(10:0.2:150)
+    range = collect(10:0.2:160)
     for a in 1:len_α
         for i in 1:len_vel
             spline = linear_interpolation(sort(average_deg_HY[i, :, a]), variable_HY[i, sortperm(average_deg_HY[i, :, a]), a])
@@ -96,7 +97,7 @@ end
 
 function compute_integral_euclidean(average_deg_quantile, variable_fMRI, average_deg_EU, variable_EU, len_vel, len_thre)
     integral_euclidean = zeros(len_vel)
-    range = collect(10:0.2:150)
+    range = collect(10:0.2:160)
     for i in 1:len_vel
         spline = linear_interpolation(sort(average_deg_EU[i, :]), variable_EU[i, sortperm(average_deg_EU[i, :])])
         spline_fMRI = linear_interpolation(sort(average_deg_quantile), variable_fMRI[2, sortperm(average_deg_quantile)])
@@ -122,6 +123,8 @@ function find_minima_α_v(integral, αrange=collect(0.5:0.025:1.2), velocities=c
     return minimum_area, best_velocity, best_α, indices
 end
 
+
+
 function main()
     thresholds = append!(collect(0.2:0.05:0.90), collect(0.92:0.02:0.98))
     subjects = readdlm("TemporalBrainNetworksCode/src/filtered-subjects-mod.txt", Int)
@@ -132,7 +135,7 @@ function main()
     velocities = collect(0.1:0.1:0.9)
     αrange = collect(0.5:0.025:1.2)
     average_deg_HY, clustering_HY, path_len_HY, temp_clustering_HY, small_world_HY, small_world_SB_HY = load_hyperbolic_data(len_R)
-    integral = compute_integral_hyperbolic(average_deg_quantile, average_deg_HY, small_world_quantile, small_world_HY, length(velocities), length(αrange))
+    integral = compute_integral_hyperbolic(average_deg_quantile, average_deg_HY, small_world_SB_quantile, small_world_SB_HY, length(velocities), length(αrange))
     minimum_area, best_velocity, best_α, indices = find_minima_α_v(integral, αrange, velocities)
     println("Minimum area: ", minimum_area)
     println("Best velocity: ", best_velocity)
@@ -140,20 +143,34 @@ function main()
     println("Indices: ", indices)
     avEU, clEU, plEU, tccEU = load_euclidean_data()
     avEUb, clEUb, plEUb, tccEUb = load_euclideanBorder_data()
-    integral_euclidean = compute_integral_euclidean(average_deg_quantile, small_world_quantile, avEU, clEU./plEU, length(velocities), length(thresholds))
-    integral_euclidean_border = compute_integral_euclidean(average_deg_quantile, small_world_quantile, avEUb, clEUb./plEUb, length(velocities), length(thresholds))
+    integral_euclidean = compute_integral_euclidean(average_deg_quantile, small_world_SB_quantile, avEU, tccEU ./ plEU, length(velocities), length(thresholds))
+    integral_euclidean_border = compute_integral_euclidean(average_deg_quantile, small_world_SB_quantile, avEUb, tccEUb ./ plEUb, length(velocities), length(thresholds))
     minimum_area, best_velocity, indices = find_minimum_v(integral_euclidean, velocities)
     println("Minimum area euclidean: ", minimum_area)
     println("Best velocity euclidean: ", best_velocity)
     println("Indices euclidean: ", indices)
-    minimum_area, best_velocity, indices = find_minimum_v(integral_euclidean_border, velocities)    
+    minimum_area, best_velocity, indices = find_minimum_v(integral_euclidean_border, velocities)
     println("Minimum area euclidean border: ", minimum_area)
     println("Best velocity euclidean border: ", best_velocity)
     println("Indices euclidean border: ", indices)
-
+    myplot()
 end
 #CHANGE AND COMPUTE ONLY THINGS FOR SW
 
+function myplot()
+    subjects= readdlm("TemporalBrainNetworksCode/src/filtered-subjects-mod.txt", Int)
+    Rrange = collect(0.5:0.5:14)
+    thresholds = append!(collect(0.2:0.05:0.90), collect(0.92:0.02:0.98))
+    average_deg_all, clustering_all, path_len_all, temp_clustering_all = load_fMRI_data(subjects, thresholds)
+    average_deg_quantile, clustering_quantile, path_len_quantile, small_world_quantile, small_world_SB_quantile, temp_clustering_quantile = compute_quantiles(average_deg_all, clustering_all, path_len_all, temp_clustering_all, thresholds)
+    average_deg_HY, clustering_HY, path_len_HY, temp_clustering_HY, small_world_HY, small_world_SB_HY = load_hyperbolic_data(length(Rrange))
 
+    avEU, clEU, plEU, tccEU = load_euclidean_data()
+    avEUb, clEUb, plEUb, tccEUb = load_euclideanBorder_data()
+    p = plot(average_deg_quantile, small_world_SB_quantile[2, :], label="fMRI", xlabel="Average degree", ylabel="Small-worldness", legend=:topleft, xlims=(0, 170), ylims=(0, 0.6))
+    plot!(p, average_deg_HY[8, :, 23], small_world_SB_HY[8, :, 23], label="HY")
+    plot!(p, avEU[3,:], (tccEU ./ plEU)[3, :], label="EU")
+    plot!(p, avEUb[4,:], (tccEUb ./ plEUb)[4, :], label="EU border")
+end
 
 main()
