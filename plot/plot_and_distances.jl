@@ -1,4 +1,4 @@
-using NPZ, Random, Distributions, LinearAlgebra, Permutations, Plots, JLD2, Statistics, DelimitedFiles, Interpolations, QuadGK, LaTeXStrings
+using NPZ, Random, Distributions, LinearAlgebra, Permutations, Plots, JLD2, Statistics, DelimitedFiles, Interpolations, QuadGK, LaTeXStrings, Measures
 
 # LOAD DATA 
 function load_fMRI_data(subjects, thresholds)
@@ -8,16 +8,16 @@ function load_fMRI_data(subjects, thresholds)
     average_deg_all = zeros(len_sub, len_thre)
     clustering_all = zeros(len_sub, len_thre)
     path_len_all = zeros(len_sub, len_thre)
-    temp_clustering_all = zeros(len_sub, len_thre)
+    temp_corr_all = zeros(len_sub, len_thre)
     # load data
     for i in 1:len_sub
         @load "/data/Hyperbrain/$(subjects[i])/$(subjects[i])_schaefer_300_thre_02_005_098_OR_RT_RE_ws60_wo30.jld2" av cl pl tcc
         average_deg_all[i, :] = av
         clustering_all[i, :] = cl
         path_len_all[i, :] = pl
-        temp_clustering_all[i, :] = tcc
+        temp_corr_all[i, :] = tcc
     end
-    return average_deg_all, clustering_all, path_len_all, temp_clustering_all
+    return average_deg_all, clustering_all, path_len_all, temp_corr_all
 end
 
 function load_fMRI_data_RT(subjects, thresholds)
@@ -27,16 +27,16 @@ function load_fMRI_data_RT(subjects, thresholds)
     average_deg_all = zeros(len_sub, len_thre)
     clustering_all = zeros(len_sub, len_thre)
     path_len_all = zeros(len_sub, len_thre)
-    temp_clustering_all = zeros(len_sub, len_thre)
+    temp_corr_all = zeros(len_sub, len_thre)
     # load data
     for i in 1:len_sub
         @load "/data/Hyperbrain/$(subjects[i])/$(subjects[i])_schaefer_300_thre_02_005_098_OR_RT_RE_ws60_wo30.jld2" avRT clRT plRT tccRT
         average_deg_all[i, :] = avRT
         clustering_all[i, :] = clRT
         path_len_all[i, :] = plRT
-        temp_clustering_all[i, :] = tccRT
+        temp_corr_all[i, :] = tccRT
     end
-    return average_deg_all, clustering_all, path_len_all, temp_clustering_all
+    return average_deg_all, clustering_all, path_len_all, temp_corr_all
 end
 
 function load_fMRI_data_RE(subjects, thresholds)
@@ -46,16 +46,16 @@ function load_fMRI_data_RE(subjects, thresholds)
     average_deg_all = zeros(len_sub, len_thre)
     clustering_all = zeros(len_sub, len_thre)
     path_len_all = zeros(len_sub, len_thre)
-    temp_clustering_all = zeros(len_sub, len_thre)
+    temp_corr_all = zeros(len_sub, len_thre)
     # load data
     for i in 1:len_sub
         @load "/data/Hyperbrain/$(subjects[i])/$(subjects[i])_schaefer_300_thre_02_005_098_OR_RT_RE_ws60_wo30.jld2" avRE clRE plRE tccRE
         average_deg_all[i, :] = avRE
         clustering_all[i, :] = clRE
         path_len_all[i, :] = plRE
-        temp_clustering_all[i, :] = tccRE
+        temp_corr_all[i, :] = tccRE
     end
-    return average_deg_all, clustering_all, path_len_all, temp_clustering_all
+    return average_deg_all, clustering_all, path_len_all, temp_corr_all
 end
 
 function load_euclidean_data(len)
@@ -63,32 +63,32 @@ function load_euclidean_data(len)
     average_deg_all = zeros(10, len)
     clustering_all = zeros(10, len)
     path_len_all = zeros(10, len)
-    temp_clustering_all = zeros(10, len)
+    temp_corr_all = zeros(10, len)
     # load data
     for i in 1:10
         @load "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/data/euclidean_300_thre_02_005_098_v01_$(i).jld2" avEU clEU plEU tccEU
         average_deg_all[i, :] = avEU
         clustering_all[i, :] = clEU
         path_len_all[i, :] = plEU
-        temp_clustering_all[i, :] = tccEU
+        temp_corr_all[i, :] = tccEU
     end
-    return average_deg_all, clustering_all, path_len_all, temp_clustering_all
+    return average_deg_all, clustering_all, path_len_all, temp_corr_all
 end
 function load_euclideanBorder_data(len)
     # initialize variables
     average_deg_all = zeros(10, len)
     clustering_all = zeros(10, len)
     path_len_all = zeros(10, len)
-    temp_clustering_all = zeros(10, len)
+    temp_corr_all = zeros(10, len)
     # load data
     for i in 1:10
         @load "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/data/euclideanBorder_300_r_0_005_08_v01_$(i).jld2" avEU clEU plEU tccEU
         average_deg_all[i, :] = avEU
         clustering_all[i, :] = clEU
         path_len_all[i, :] = plEU
-        temp_clustering_all[i, :] = tccEU
+        temp_corr_all[i, :] = tccEU
     end
-    return average_deg_all, clustering_all, path_len_all, temp_clustering_all
+    return average_deg_all, clustering_all, path_len_all, temp_corr_all
 end
 
 function load_hyperbolic_data(len)
@@ -96,16 +96,16 @@ function load_hyperbolic_data(len)
     average_deg_all = zeros(10, len)
     clustering_all = zeros(10, len)
     path_len_all = zeros(10, len)
-    temp_clustering_all = zeros(10, len)
+    temp_corr_all = zeros(10, len)
     # load data
     for i in 1:10
         @load "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/data/hyperbolic_300_alpha_50_R_0_05_18_v_10_$(i).jld2" avHY clHY plHY tccHY
         average_deg_all[i, :] = avHY
         clustering_all[i, :] = clHY
         path_len_all[i, :] = plHY
-        temp_clustering_all[i, :] = tccHY
+        temp_corr_all[i, :] = tccHY
     end
-    return average_deg_all, clustering_all, path_len_all, temp_clustering_all
+    return average_deg_all, clustering_all, path_len_all, temp_corr_all
 end
 
 function load_hyperbolic_SB_data(len)
@@ -113,16 +113,16 @@ function load_hyperbolic_SB_data(len)
     average_deg_all = zeros(10, len)
     clustering_all = zeros(10, len)
     path_len_all = zeros(10, len)
-    temp_clustering_all = zeros(10, len)
+    temp_corr_all = zeros(10, len)
     # load data
     for i in 1:10
         @load "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/data/hyperbolic_300_alpha_105_R_0_05_18_v_80_$(i).jld2" avHY clHY plHY tccHY
         average_deg_all[i, :] = avHY
         clustering_all[i, :] = clHY
         path_len_all[i, :] = plHY
-        temp_clustering_all[i, :] = tccHY
+        temp_corr_all[i, :] = tccHY
     end
-    return average_deg_all, clustering_all, path_len_all, temp_clustering_all
+    return average_deg_all, clustering_all, path_len_all, temp_corr_all
 end
 
 function my_quantile(len, variable)
@@ -133,7 +133,7 @@ function my_quantile(len, variable)
     return quantile_variable
 end
 
-function compute_quantiles(average_deg_all, clustering_all, path_len_all, temp_clustering_all, len)
+function compute_quantiles(average_deg_all, clustering_all, path_len_all, temp_corr_all, len)
     # initialize variables
     average_deg_quantile = zeros(len)
     for j in 1:len
@@ -142,9 +142,9 @@ function compute_quantiles(average_deg_all, clustering_all, path_len_all, temp_c
     clustering_quantile = my_quantile(len, clustering_all)
     path_len_quantile = my_quantile(len, path_len_all)
     small_world_quantile = my_quantile(len, clustering_all ./ path_len_all)
-    small_world_SB_quantile = my_quantile(len, temp_clustering_all ./ path_len_all)
-    temp_clustering_quantile = my_quantile(len, temp_clustering_all)
-    return average_deg_quantile, clustering_quantile, path_len_quantile, small_world_quantile, small_world_SB_quantile, temp_clustering_quantile
+    small_world_SB_quantile = my_quantile(len, temp_corr_all ./ path_len_all)
+    temp_corr_quantile = my_quantile(len, temp_corr_all)
+    return average_deg_quantile, clustering_quantile, path_len_quantile, small_world_quantile, small_world_SB_quantile, temp_corr_quantile
 end
 
 function load_and_quantiles()
@@ -152,21 +152,21 @@ function load_and_quantiles()
     subjects = readdlm("TemporalBrainNetworksCode/src/filtered-subjects-mod.txt", Int)
     radiusRange = collect(0:0.05:0.8)
     Rrange = collect(0:0.5:18)
-    average_deg_all, clustering_all, path_len_all, temp_clustering_all = load_fMRI_data(subjects, thresholds)
-    average_deg_all_RT, clustering_all_RT, path_len_all_RT, temp_clustering_all_RT = load_fMRI_data_RT(subjects, thresholds)
-    average_deg_all_RE, clustering_all_RE, path_len_all_RE, temp_clustering_all_RE = load_fMRI_data_RE(subjects, thresholds)
-    average_deg_all_EU, clustering_all_EU, path_len_all_EU, temp_clustering_all_EU = load_euclidean_data(length(thresholds))
-    average_deg_all_EUB, clustering_all_EUB, path_len_all_EUB, temp_clustering_all_EUB = load_euclideanBorder_data(length(radiusRange))
-    average_deg_all_HY, clustering_all_HY, path_len_all_HY, temp_clustering_all_HY = load_hyperbolic_data(length(Rrange))
-    average_deg_all_HYSB, clustering_all_HYSB, path_len_all_HYSB, temp_clustering_all_HYSB = load_hyperbolic_SB_data(length(Rrange))
-    average_deg_quantile, clustering_quantile, path_len_quantile, small_world_quantile, small_world_SB_quantile, temp_clustering_quantile = compute_quantiles(average_deg_all, clustering_all, path_len_all, temp_clustering_all, length(thresholds))
-    average_deg_quantile_RT, clustering_quantile_RT, path_len_quantile_RT, small_world_quantile_RT, small_world_SB_quantile_RT, temp_clustering_quantile_RT = compute_quantiles(average_deg_all_RT, clustering_all_RT, path_len_all_RT, temp_clustering_all_RT, length(thresholds))
-    average_deg_quantile_RE, clustering_quantile_RE, path_len_quantile_RE, small_world_quantile_RE, small_world_SB_quantile_RE, temp_clustering_quantile_RE = compute_quantiles(average_deg_all_RE, clustering_all_RE, path_len_all_RE, temp_clustering_all_RE, length(thresholds))
-    average_deg_quantile_EU, clustering_quantile_EU, path_len_quantile_EU, small_world_quantile_EU, small_world_SB_quantile_EU, temp_clustering_quantile_EU = compute_quantiles(average_deg_all_EU, clustering_all_EU, path_len_all_EU, temp_clustering_all_EU, length(thresholds))
-    average_deg_quantile_EUB, clustering_quantile_EUB, path_len_quantile_EUB, small_world_quantile_EUB, small_world_SB_quantile_EUB, temp_clustering_quantile_EUB = compute_quantiles(average_deg_all_EUB, clustering_all_EUB, path_len_all_EUB, temp_clustering_all_EUB, length(radiusRange))
-    average_deg_quantile_HY, clustering_quantile_HY, path_len_quantile_HY, small_world_quantile_HY, small_world_SB_quantile_HY, temp_clustering_quantile_HY = compute_quantiles(average_deg_all_HY, clustering_all_HY, path_len_all_HY, temp_clustering_all_HY, length(Rrange))
-    average_deg_quantile_HYSB, clustering_quantile_HYSB, path_len_quantile_HYSB, small_world_quantile_HYSB, small_world_SB_quantile_HYSB, temp_clustering_quantile_HYSB = compute_quantiles(average_deg_all_HYSB, clustering_all_HYSB, path_len_all_HYSB, temp_clustering_all_HYSB, length(Rrange))
-    return average_deg_quantile, clustering_quantile, path_len_quantile, small_world_quantile, small_world_SB_quantile, temp_clustering_quantile, average_deg_quantile_RT, clustering_quantile_RT, path_len_quantile_RT, small_world_quantile_RT, small_world_SB_quantile_RT, temp_clustering_quantile_RT, average_deg_quantile_RE, clustering_quantile_RE, path_len_quantile_RE, small_world_quantile_RE, small_world_SB_quantile_RE, temp_clustering_quantile_RE, average_deg_quantile_EU, clustering_quantile_EU, path_len_quantile_EU, small_world_quantile_EU, small_world_SB_quantile_EU, temp_clustering_quantile_EU, average_deg_quantile_EUB, clustering_quantile_EUB, path_len_quantile_EUB, small_world_quantile_EUB, small_world_SB_quantile_EUB, temp_clustering_quantile_EUB, average_deg_quantile_HY, clustering_quantile_HY, path_len_quantile_HY, small_world_quantile_HY, small_world_SB_quantile_HY, temp_clustering_quantile_HY, average_deg_quantile_HYSB, clustering_quantile_HYSB, path_len_quantile_HYSB, small_world_quantile_HYSB, small_world_SB_quantile_HYSB, temp_clustering_quantile_HYSB
+    average_deg_all, clustering_all, path_len_all, temp_corr_all = load_fMRI_data(subjects, thresholds)
+    average_deg_all_RT, clustering_all_RT, path_len_all_RT, temp_corr_all_RT = load_fMRI_data_RT(subjects, thresholds)
+    average_deg_all_RE, clustering_all_RE, path_len_all_RE, temp_corr_all_RE = load_fMRI_data_RE(subjects, thresholds)
+    average_deg_all_EU, clustering_all_EU, path_len_all_EU, temp_corr_all_EU = load_euclidean_data(length(thresholds))
+    average_deg_all_EUB, clustering_all_EUB, path_len_all_EUB, temp_corr_all_EUB = load_euclideanBorder_data(length(radiusRange))
+    average_deg_all_HY, clustering_all_HY, path_len_all_HY, temp_corr_all_HY = load_hyperbolic_data(length(Rrange))
+    average_deg_all_HYSB, clustering_all_HYSB, path_len_all_HYSB, temp_corr_all_HYSB = load_hyperbolic_SB_data(length(Rrange))
+    average_deg_quantile, clustering_quantile, path_len_quantile, small_world_quantile, small_world_SB_quantile, temp_corr_quantile = compute_quantiles(average_deg_all, clustering_all, path_len_all, temp_corr_all, length(thresholds))
+    average_deg_quantile_RT, clustering_quantile_RT, path_len_quantile_RT, small_world_quantile_RT, small_world_SB_quantile_RT, temp_corr_quantile_RT = compute_quantiles(average_deg_all_RT, clustering_all_RT, path_len_all_RT, temp_corr_all_RT, length(thresholds))
+    average_deg_quantile_RE, clustering_quantile_RE, path_len_quantile_RE, small_world_quantile_RE, small_world_SB_quantile_RE, temp_corr_quantile_RE = compute_quantiles(average_deg_all_RE, clustering_all_RE, path_len_all_RE, temp_corr_all_RE, length(thresholds))
+    average_deg_quantile_EU, clustering_quantile_EU, path_len_quantile_EU, small_world_quantile_EU, small_world_SB_quantile_EU, temp_corr_quantile_EU = compute_quantiles(average_deg_all_EU, clustering_all_EU, path_len_all_EU, temp_corr_all_EU, length(thresholds))
+    average_deg_quantile_EUB, clustering_quantile_EUB, path_len_quantile_EUB, small_world_quantile_EUB, small_world_SB_quantile_EUB, temp_corr_quantile_EUB = compute_quantiles(average_deg_all_EUB, clustering_all_EUB, path_len_all_EUB, temp_corr_all_EUB, length(radiusRange))
+    average_deg_quantile_HY, clustering_quantile_HY, path_len_quantile_HY, small_world_quantile_HY, small_world_SB_quantile_HY, temp_corr_quantile_HY = compute_quantiles(average_deg_all_HY, clustering_all_HY, path_len_all_HY, temp_corr_all_HY, length(Rrange))
+    average_deg_quantile_HYSB, clustering_quantile_HYSB, path_len_quantile_HYSB, small_world_quantile_HYSB, small_world_SB_quantile_HYSB, temp_corr_quantile_HYSB = compute_quantiles(average_deg_all_HYSB, clustering_all_HYSB, path_len_all_HYSB, temp_corr_all_HYSB, length(Rrange))
+    return average_deg_quantile, clustering_quantile, path_len_quantile, small_world_quantile, small_world_SB_quantile, temp_corr_quantile, average_deg_quantile_RT, clustering_quantile_RT, path_len_quantile_RT, small_world_quantile_RT, small_world_SB_quantile_RT, temp_corr_quantile_RT, average_deg_quantile_RE, clustering_quantile_RE, path_len_quantile_RE, small_world_quantile_RE, small_world_SB_quantile_RE, temp_corr_quantile_RE, average_deg_quantile_EU, clustering_quantile_EU, path_len_quantile_EU, small_world_quantile_EU, small_world_SB_quantile_EU, temp_corr_quantile_EU, average_deg_quantile_EUB, clustering_quantile_EUB, path_len_quantile_EUB, small_world_quantile_EUB, small_world_SB_quantile_EUB, temp_corr_quantile_EUB, average_deg_quantile_HY, clustering_quantile_HY, path_len_quantile_HY, small_world_quantile_HY, small_world_SB_quantile_HY, temp_corr_quantile_HY, average_deg_quantile_HYSB, clustering_quantile_HYSB, path_len_quantile_HYSB, small_world_quantile_HYSB, small_world_SB_quantile_HYSB, temp_corr_quantile_HYSB
 end
 #L"\mathrm{Temporal\,\, Small\,\, Worldness}"
 function myplot_withmarker(measure, variable, variableRT, variableRE, variableEU, variableEUB, variableHY, variableHYSB, av, avRT, avRE, avEU, avEUB, avHY, avHYSB)
@@ -192,7 +192,7 @@ function myplot_withmarker(measure, variable, variableRT, variableRE, variableEU
     return p
 end
 
-function myplot(measure, variable, variableRT, variableRE, variableEU, variableEUB, variableHY, variableHYSB, av, avRT, avRE, avEU, avEUB, avHY, avHYSB)
+function myplot(measure, legendplace, variable, variableRT, variableRE, variableEU, variableEUB, variableHY, variableHYSB, av, avRT, avRE, avEU, avEUB, avHY, avHYSB)
     line_lw = 3
     fillalpha = 0.35
     red=1
@@ -202,7 +202,7 @@ function myplot(measure, variable, variableRT, variableRE, variableEU, variableE
     orange=5
     yellow=6
     grey=9
-    p = plot(av, variable[1, :], fillrange=variable[3, :], fillalpha=fillalpha, c=blue, label="", lw=0, palette=:Set1_9, legend=:topleft, legendfontsize=9, xlims=(0, 170), grid=false, dpi=1200)
+    p = plot(av, variable[1, :], fillrange=variable[3, :], fillalpha=fillalpha, c=blue, label="", lw=0, palette=:Set1_9, legend=legendplace, legendfontsize=9, xlims=(0, 170), grid=false, dpi=1200)
    
     plot!(avRE, variableRE[1, :], fillrange=variableRE[3, :], fillalpha=fillalpha, c=violet, label="", lw=0)
     plot!(avRE, variableRE[2, :], label=L"\mathrm{Random \,\, Edges}", lw=line_lw, c=violet)
@@ -220,20 +220,19 @@ function myplot(measure, variable, variableRT, variableRE, variableEU, variableE
 
     xlabel!("Average degree")
     ylabel!("$(measure)")
-    title!(L"\mathrm{302\,\, nodes}")
     return p
 end
 
 function main()
-    average_deg_quantile, clustering_quantile, path_len_quantile, small_world_quantile, small_world_SB_quantile, temp_clustering_quantile, average_deg_quantile_RT, clustering_quantile_RT, path_len_quantile_RT, small_world_quantile_RT, small_world_SB_quantile_RT, temp_clustering_quantile_RT, average_deg_quantile_RE, clustering_quantile_RE, path_len_quantile_RE, small_world_quantile_RE, small_world_SB_quantile_RE, temp_clustering_quantile_RE, average_deg_quantile_EU, clustering_quantile_EU, path_len_quantile_EU, small_world_quantile_EU, small_world_SB_quantile_EU, temp_clustering_quantile_EU, average_deg_quantile_EUB, clustering_quantile_EUB, path_len_quantile_EUB, small_world_quantile_EUB, small_world_SB_quantile_EUB, temp_clustering_quantile_EUB, average_deg_quantile_HY, clustering_quantile_HY, path_len_quantile_HY, small_world_quantile_HY, small_world_SB_quantile_HY, temp_clustering_quantile_HY, average_deg_quantile_HYSB, clustering_quantile_HYSB, path_len_quantile_HYSB, small_world_quantile_HYSB, small_world_SB_quantile_HYSB, temp_clustering_quantile_HYSB = load_and_quantiles()
-    p1 = myplot("Temporal Small Worldness", small_world_quantile, small_world_quantile_RT, small_world_quantile_RE, small_world_quantile_EU, small_world_quantile_EUB, small_world_quantile_HY, small_world_quantile_HYSB, average_deg_quantile, average_deg_quantile_RT, average_deg_quantile_RE, average_deg_quantile_EU, average_deg_quantile_EUB, average_deg_quantile_HY, average_deg_quantile_HYSB)
-    p2= myplot("Temporal Small Worldness SB", small_world_SB_quantile, small_world_SB_quantile_RT, small_world_SB_quantile_RE, small_world_SB_quantile_EU, small_world_SB_quantile_EUB, small_world_SB_quantile_HY, small_world_SB_quantile_HYSB, average_deg_quantile, average_deg_quantile_RT, average_deg_quantile_RE, average_deg_quantile_EU, average_deg_quantile_EUB, average_deg_quantile_HY, average_deg_quantile_HYSB)
-    p3 = myplot("Temporal Clustering", temp_clustering_quantile, temp_clustering_quantile_RT, temp_clustering_quantile_RE, temp_clustering_quantile_EU, temp_clustering_quantile_EUB, temp_clustering_quantile_HY, temp_clustering_quantile_HYSB, average_deg_quantile, average_deg_quantile_RT, average_deg_quantile_RE, average_deg_quantile_EU, average_deg_quantile_EUB, average_deg_quantile_HY, average_deg_quantile_HYSB)
-    p4 = myplot("Clustering", clustering_quantile, clustering_quantile_RT, clustering_quantile_RE, clustering_quantile_EU, clustering_quantile_EUB, clustering_quantile_HY, clustering_quantile_HYSB, average_deg_quantile, average_deg_quantile_RT, average_deg_quantile_RE, average_deg_quantile_EU, average_deg_quantile_EUB, average_deg_quantile_HY, average_deg_quantile_HYSB)
-    p5 = myplot("Path Length", path_len_quantile, path_len_quantile_RT, path_len_quantile_RE, path_len_quantile_EU, path_len_quantile_EUB, path_len_quantile_HY, path_len_quantile_HYSB, average_deg_quantile, average_deg_quantile_RT, average_deg_quantile_RE, average_deg_quantile_EU, average_deg_quantile_EUB, average_deg_quantile_HY, average_deg_quantile_HYSB)
-    p = plot(p1, p2, p3, p4, p5, layout=(5, 1), size=(800, 2000))
+    average_deg_quantile, clustering_quantile, path_len_quantile, small_world_quantile, small_world_SB_quantile, temp_corr_quantile, average_deg_quantile_RT, clustering_quantile_RT, path_len_quantile_RT, small_world_quantile_RT, small_world_SB_quantile_RT, temp_corr_quantile_RT, average_deg_quantile_RE, clustering_quantile_RE, path_len_quantile_RE, small_world_quantile_RE, small_world_SB_quantile_RE, temp_corr_quantile_RE, average_deg_quantile_EU, clustering_quantile_EU, path_len_quantile_EU, small_world_quantile_EU, small_world_SB_quantile_EU, temp_corr_quantile_EU, average_deg_quantile_EUB, clustering_quantile_EUB, path_len_quantile_EUB, small_world_quantile_EUB, small_world_SB_quantile_EUB, temp_corr_quantile_EUB, average_deg_quantile_HY, clustering_quantile_HY, path_len_quantile_HY, small_world_quantile_HY, small_world_SB_quantile_HY, temp_corr_quantile_HY, average_deg_quantile_HYSB, clustering_quantile_HYSB, path_len_quantile_HYSB, small_world_quantile_HYSB, small_world_SB_quantile_HYSB, temp_corr_quantile_HYSB = load_and_quantiles()
+    p1 = myplot("Temporal Small Worldness",:topleft, small_world_quantile, small_world_quantile_RT, small_world_quantile_RE, small_world_quantile_EU, small_world_quantile_EUB, small_world_quantile_HY, small_world_quantile_HYSB, average_deg_quantile, average_deg_quantile_RT, average_deg_quantile_RE, average_deg_quantile_EU, average_deg_quantile_EUB, average_deg_quantile_HY, average_deg_quantile_HYSB)
+    p2= myplot("Temporal Small Worldness SB",false, small_world_SB_quantile, small_world_SB_quantile_RT, small_world_SB_quantile_RE, small_world_SB_quantile_EU, small_world_SB_quantile_EUB, small_world_SB_quantile_HY, small_world_SB_quantile_HYSB, average_deg_quantile, average_deg_quantile_RT, average_deg_quantile_RE, average_deg_quantile_EU, average_deg_quantile_EUB, average_deg_quantile_HY, average_deg_quantile_HYSB)
+    p3 = myplot("Temporal Correlation Coefficient", false,temp_corr_quantile, temp_corr_quantile_RT, temp_corr_quantile_RE, temp_corr_quantile_EU, temp_corr_quantile_EUB, temp_corr_quantile_HY, temp_corr_quantile_HYSB, average_deg_quantile, average_deg_quantile_RT, average_deg_quantile_RE, average_deg_quantile_EU, average_deg_quantile_EUB, average_deg_quantile_HY, average_deg_quantile_HYSB)
+    p4 = myplot("Temporal Clustering", false,clustering_quantile, clustering_quantile_RT, clustering_quantile_RE, clustering_quantile_EU, clustering_quantile_EUB, clustering_quantile_HY, clustering_quantile_HYSB, average_deg_quantile, average_deg_quantile_RT, average_deg_quantile_RE, average_deg_quantile_EU, average_deg_quantile_EUB, average_deg_quantile_HY, average_deg_quantile_HYSB)
+    p5 = myplot("Temporal Path Length",false, path_len_quantile, path_len_quantile_RT, path_len_quantile_RE, path_len_quantile_EU, path_len_quantile_EUB, path_len_quantile_HY, path_len_quantile_HYSB, average_deg_quantile, average_deg_quantile_RT, average_deg_quantile_RE, average_deg_quantile_EU, average_deg_quantile_EUB, average_deg_quantile_HY, average_deg_quantile_HYSB)
+    p=plot(p1,p2,p3,p4,p5, layout=(5,1), size=(800, 3000),margin=25mm)
 
-
+    savefig(p, "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/images/prova.pdf")
 end
 
 main()
