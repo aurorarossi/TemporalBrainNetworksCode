@@ -192,18 +192,18 @@ function myplot_withmarker(measure, variable, variableRT, variableRE, variableEU
     return p
 end
 
-function myplot(measure, legendplace, variable, variableRT, variableRE, variableEU, variableEUB, variableHY, variableHYSB, av, avRT, avRE, avEU, avEUB, avHY, avHYSB)
+function myplot(measure, legendplace, yaxisscale, xaxisscale, variable, variableRT, variableRE, variableEU, variableEUB, variableHY, variableHYSB, av, avRT, avRE, avEU, avEUB, avHY, avHYSB)
     line_lw = 3
     fillalpha = 0.35
-    red=1
-    blue=2
-    green=3
-    pink=8
-    orange=5
-    violet=4
-    grey=9
-    p = plot(av, variable[1, :], fillrange=variable[3, :], fillalpha=fillalpha, c=blue, label="", lw=0, palette=:Set1_9, legend=legendplace, legendfontsize=9, xlims=(0, 170), grid=false, dpi=1200)
-   
+    red = 1
+    blue = 2
+    green = 3
+    pink = 8
+    orange = 5
+    violet = 4
+    grey = 9
+    p = plot(av, variable[1, :], fillrange=variable[3, :], fillalpha=fillalpha, c=blue, label="", lw=0, palette=:Set1_9, legend=legendplace, legendfontsize=9, xlims=(0, 170), grid=false, dpi=1200, yaxis=yaxisscale, xaxis=xaxisscale)
+
     plot!(avRE, variableRE[1, :], fillrange=variableRE[3, :], fillalpha=fillalpha, c=pink, label="", lw=0)
     plot!(avRE, variableRE[2, :], label=L"\mathrm{Random \,\, Edges}", lw=line_lw, c=pink)
     plot!(avRT, variableRT[1, :], fillrange=variableRT[3, :], fillalpha=fillalpha, c=grey, label="", lw=0)
@@ -226,12 +226,12 @@ end
 
 function main()
     average_deg_quantile, clustering_quantile, path_len_quantile, small_world_quantile, small_world_SB_quantile, temp_corr_quantile, average_deg_quantile_RT, clustering_quantile_RT, path_len_quantile_RT, small_world_quantile_RT, small_world_SB_quantile_RT, temp_corr_quantile_RT, average_deg_quantile_RE, clustering_quantile_RE, path_len_quantile_RE, small_world_quantile_RE, small_world_SB_quantile_RE, temp_corr_quantile_RE, average_deg_quantile_EU, clustering_quantile_EU, path_len_quantile_EU, small_world_quantile_EU, small_world_SB_quantile_EU, temp_corr_quantile_EU, average_deg_quantile_EUB, clustering_quantile_EUB, path_len_quantile_EUB, small_world_quantile_EUB, small_world_SB_quantile_EUB, temp_corr_quantile_EUB, average_deg_quantile_HY, clustering_quantile_HY, path_len_quantile_HY, small_world_quantile_HY, small_world_SB_quantile_HY, temp_corr_quantile_HY, average_deg_quantile_HYSB, clustering_quantile_HYSB, path_len_quantile_HYSB, small_world_quantile_HYSB, small_world_SB_quantile_HYSB, temp_corr_quantile_HYSB = load_and_quantiles()
-    p1 = myplot("Temporal Small Worldness",:topleft, small_world_quantile, small_world_quantile_RT, small_world_quantile_RE, small_world_quantile_EU, small_world_quantile_EUB, small_world_quantile_HY, small_world_quantile_HYSB, average_deg_quantile, average_deg_quantile_RT, average_deg_quantile_RE, average_deg_quantile_EU, average_deg_quantile_EUB, average_deg_quantile_HY, average_deg_quantile_HYSB)
-    p2= myplot("Temporal Small Worldness SB",false, small_world_SB_quantile, small_world_SB_quantile_RT, small_world_SB_quantile_RE, small_world_SB_quantile_EU, small_world_SB_quantile_EUB, small_world_SB_quantile_HY, small_world_SB_quantile_HYSB, average_deg_quantile, average_deg_quantile_RT, average_deg_quantile_RE, average_deg_quantile_EU, average_deg_quantile_EUB, average_deg_quantile_HY, average_deg_quantile_HYSB)
-    p3 = myplot("Temporal Correlation Coefficient", false,temp_corr_quantile, temp_corr_quantile_RT, temp_corr_quantile_RE, temp_corr_quantile_EU, temp_corr_quantile_EUB, temp_corr_quantile_HY, temp_corr_quantile_HYSB, average_deg_quantile, average_deg_quantile_RT, average_deg_quantile_RE, average_deg_quantile_EU, average_deg_quantile_EUB, average_deg_quantile_HY, average_deg_quantile_HYSB)
-    p4 = myplot("Temporal Clustering", false,clustering_quantile, clustering_quantile_RT, clustering_quantile_RE, clustering_quantile_EU, clustering_quantile_EUB, clustering_quantile_HY, clustering_quantile_HYSB, average_deg_quantile, average_deg_quantile_RT, average_deg_quantile_RE, average_deg_quantile_EU, average_deg_quantile_EUB, average_deg_quantile_HY, average_deg_quantile_HYSB)
-    p5 = myplot("Temporal Path Length",false, path_len_quantile, path_len_quantile_RT, path_len_quantile_RE, path_len_quantile_EU, path_len_quantile_EUB, path_len_quantile_HY, path_len_quantile_HYSB, average_deg_quantile, average_deg_quantile_RT, average_deg_quantile_RE, average_deg_quantile_EU, average_deg_quantile_EUB, average_deg_quantile_HY, average_deg_quantile_HYSB)
-    p=plot(p1,p2,p3,p4,p5, layout=(5,1), size=(800, 3000),margin=25mm)
+    p1 = myplot("Temporal Small Worldness", :topleft, :identity, :identity, small_world_quantile, small_world_quantile_RT, small_world_quantile_RE, small_world_quantile_EU, small_world_quantile_EUB, small_world_quantile_HY, small_world_quantile_HYSB, average_deg_quantile, average_deg_quantile_RT, average_deg_quantile_RE, average_deg_quantile_EU, average_deg_quantile_EUB, average_deg_quantile_HY, average_deg_quantile_HYSB)
+    p2 = myplot("Temporal Small Worldness SB", false, :identity, :identity, small_world_SB_quantile, small_world_SB_quantile_RT, small_world_SB_quantile_RE, small_world_SB_quantile_EU, small_world_SB_quantile_EUB, small_world_SB_quantile_HY, small_world_SB_quantile_HYSB, average_deg_quantile, average_deg_quantile_RT, average_deg_quantile_RE, average_deg_quantile_EU, average_deg_quantile_EUB, average_deg_quantile_HY, average_deg_quantile_HYSB)
+    p3 = myplot("Temporal Correlation Coefficient", false, :identity, :identity, temp_corr_quantile, temp_corr_quantile_RT, temp_corr_quantile_RE, temp_corr_quantile_EU, temp_corr_quantile_EUB, temp_corr_quantile_HY, temp_corr_quantile_HYSB, average_deg_quantile, average_deg_quantile_RT, average_deg_quantile_RE, average_deg_quantile_EU, average_deg_quantile_EUB, average_deg_quantile_HY, average_deg_quantile_HYSB)
+    p4 = myplot("Temporal Clustering", false, :identity, :identity, clustering_quantile, clustering_quantile_RT, clustering_quantile_RE, clustering_quantile_EU, clustering_quantile_EUB, clustering_quantile_HY, clustering_quantile_HYSB, average_deg_quantile, average_deg_quantile_RT, average_deg_quantile_RE, average_deg_quantile_EU, average_deg_quantile_EUB, average_deg_quantile_HY, average_deg_quantile_HYSB)
+    p5 = myplot("Temporal Path Length", false, :log, :identity, path_len_quantile, path_len_quantile_RT, path_len_quantile_RE, path_len_quantile_EU, path_len_quantile_EUB, path_len_quantile_HY, path_len_quantile_HYSB, average_deg_quantile, average_deg_quantile_RT, average_deg_quantile_RE, average_deg_quantile_EU, average_deg_quantile_EUB, average_deg_quantile_HY, average_deg_quantile_HYSB)
+    p = plot(p1, p2, p3, p4, p5, layout=(5, 1), size=(800, 3000), margin=25mm)
 
     savefig(p1, "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/images/tsw.svg")
     savefig(p2, "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/images/tswsb.svg")
