@@ -220,7 +220,6 @@ function myplot(measure, legendplace, yaxisscale, xaxisscale, variable, variable
 
     xlabel!("Average degree")
     ylabel!("$(measure)")
-    title!("302 nodes")
     return p
 end
 
@@ -233,11 +232,11 @@ function main()
     p5 = myplot("Temporal Path Length", false, :log, :identity, path_len_quantile, path_len_quantile_RT, path_len_quantile_RE, path_len_quantile_EU, path_len_quantile_EUB, path_len_quantile_HY, path_len_quantile_HYSB, average_deg_quantile, average_deg_quantile_RT, average_deg_quantile_RE, average_deg_quantile_EU, average_deg_quantile_EUB, average_deg_quantile_HY, average_deg_quantile_HYSB)
     p = plot(p1, p2, p3, p4, p5, layout=(5, 1), size=(800, 3000), margin=25mm)
 
-    savefig(p1, "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/images/tsw.svg")
-    savefig(p2, "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/images/tswsb.svg")
-    savefig(p3, "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/images/tcc.svg")
-    savefig(p4, "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/images/tclustering.svg")
-    savefig(p5, "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/images/tpath.svg")
+    savefig(p1, "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/images/tsw.png")
+    savefig(p2, "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/images/tswsb.png")
+    savefig(p3, "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/images/tcc.png")
+    savefig(p4, "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/images/tclustering.png")
+    savefig(p5, "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/images/tpath.png")
 end
 
 main()
