@@ -149,7 +149,7 @@ end
 
 function load_and_quantiles()
     thresholds = append!(collect(0.2:0.05:0.90), collect(0.92:0.02:0.98))
-    subjects = readdlm("TemporalBrainNetworksCode/src/filtered-subjects-mod.txt", Int)
+    subjects = readdlm("src/filtered-subjects-mod.txt", Int)
     radiusRange = collect(0:0.05:0.8)
     Rrange = collect(0:0.5:18)
     average_deg_all, clustering_all, path_len_all, temp_corr_all = load_fMRI_data(subjects, thresholds)
@@ -198,28 +198,29 @@ function myplot(measure, legendplace, variable, variableRT, variableRE, variable
     red=1
     blue=2
     green=3
-    violet=8
+    pink=8
     orange=5
-    yellow=6
+    violet=4
     grey=9
     p = plot(av, variable[1, :], fillrange=variable[3, :], fillalpha=fillalpha, c=blue, label="", lw=0, palette=:Set1_9, legend=legendplace, legendfontsize=9, xlims=(0, 170), grid=false, dpi=1200)
    
-    plot!(avRE, variableRE[1, :], fillrange=variableRE[3, :], fillalpha=fillalpha, c=violet, label="", lw=0)
-    plot!(avRE, variableRE[2, :], label=L"\mathrm{Random \,\, Edges}", lw=line_lw, c=violet)
+    plot!(avRE, variableRE[1, :], fillrange=variableRE[3, :], fillalpha=fillalpha, c=pink, label="", lw=0)
+    plot!(avRE, variableRE[2, :], label=L"\mathrm{Random \,\, Edges}", lw=line_lw, c=pink)
     plot!(avRT, variableRT[1, :], fillrange=variableRT[3, :], fillalpha=fillalpha, c=grey, label="", lw=0)
     plot!(avRT, variableRT[2, :], label=L"\mathrm{Random \,\,Times}", lw=line_lw, c=grey)
     plot!(avEU, variableEU[1, :], fillrange=variableEU[3, :], fillalpha=fillalpha, c=orange, label="", lw=0)
     plot!(avEU, variableEU[2, :], label=L"\mathrm{Geometric \,\,on\,\, torus\,\, }v=0.1", lw=line_lw, c=orange)
     plot!(avEUB, variableEUB[1, :], fillrange=variableEUB[3, :], fillalpha=fillalpha, c=green, label="", lw=0)
     plot!(avEUB, variableEUB[2, :], label=L"\mathrm{Geometric \,\,}v=0.1", lw=line_lw, c=green,)
-    plot!(avHY, variableHY[1, :], fillrange=variableHY[3, :], fillalpha=fillalpha, c=yellow, label="", lw=0)
-    plot!(avHY, variableHY[2, :], label=L"\mathrm{Hyperbolic \,\, }α=0.5, v=0.1, ζ=1", c=yellow, lw=line_lw)
+    plot!(avHY, variableHY[1, :], fillrange=variableHY[3, :], fillalpha=fillalpha, c=violet, label="", lw=0)
+    plot!(avHY, variableHY[2, :], label=L"\mathrm{Hyperbolic \,\, }α=0.5, v=0.1, ζ=1", c=violet, lw=line_lw)
     plot!(avHYSB, variableHYSB[1, :], fillrange=variableHYSB[3, :], fillalpha=fillalpha, c=red, label="", lw=0)
     plot!(avHYSB, variableHYSB[2, :], label=L"\mathrm{Hyperbolic \,\, }α=1.05, v=0.8, ζ=1 ", c=red, lw=line_lw)
     plot!(av, variable[2, :], label=L"\mathrm{Real\,\, data\,\, subjects\,\, Schaefer}", lw=line_lw, c=blue)
 
     xlabel!("Average degree")
     ylabel!("$(measure)")
+    title!("302 nodes")
     return p
 end
 
@@ -232,7 +233,11 @@ function main()
     p5 = myplot("Temporal Path Length",false, path_len_quantile, path_len_quantile_RT, path_len_quantile_RE, path_len_quantile_EU, path_len_quantile_EUB, path_len_quantile_HY, path_len_quantile_HYSB, average_deg_quantile, average_deg_quantile_RT, average_deg_quantile_RE, average_deg_quantile_EU, average_deg_quantile_EUB, average_deg_quantile_HY, average_deg_quantile_HYSB)
     p=plot(p1,p2,p3,p4,p5, layout=(5,1), size=(800, 3000),margin=25mm)
 
-    savefig(p, "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/images/prova.pdf")
+    savefig(p1, "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/images/tsw.svg")
+    savefig(p2, "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/images/tswsb.svg")
+    savefig(p3, "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/images/tcc.svg")
+    savefig(p4, "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/images/tclustering.svg")
+    savefig(p5, "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/images/tpath.svg")
 end
 
 main()
