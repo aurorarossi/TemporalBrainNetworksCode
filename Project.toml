@@ -1,4 +1,4 @@
-name = "TemporalBrainNetworks"
+name = "TemporalBrainNetworksCode"
 uuid = "af5738b0-9c44-4b29-83f9-358f03111f74"
 authors = ["Aurora Rossi <aurora.rossi@inria.fr>, Emanuele Natale <emanuele.natale@inria.fr>, Pierluigi Crescenzi <pierluigi.crescenzi@gssi.it>"]
 version = "0.1.0"
