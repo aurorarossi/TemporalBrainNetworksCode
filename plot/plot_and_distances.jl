@@ -202,7 +202,12 @@ function myplot(measure, legendplace, yaxisscale, xaxisscale, variable, variable
     orange = 5
     violet = 4
     grey = 9
-    p = plot(av, variable[1, :], fillrange=variable[3, :], fillalpha=fillalpha, c=blue, label="", lw=0, palette=:Set1_9, legend=legendplace, legendfontsize=9, xlims=(0, 170), grid=false, dpi=1200, yaxis=yaxisscale, xaxis=xaxisscale)
+    if measure !="Temporal Path Length"
+        yticks = ([0, 0.25, 0.5,0.75,1], [L"0", L"0.25", L"0.5", L"0.75",L"1"])
+    else
+        yticks = ([10^0,10^1], [L"10^0", L"10^1"])
+    end
+    p = plot(av, variable[1, :], fillrange=variable[3, :], fillalpha=fillalpha, c=blue, label="", lw=0, palette=:Set1_9, legend=legendplace, legendfontsize=12, xlims=(0, 170), grid=false, dpi=1200, yaxis=yaxisscale, xaxis=xaxisscale, xticks = ([0, 50, 100, 150, 200], [L"0", L"50", L"100", L"150", L"200"]), yticks = yticks)
 
     plot!(avRE, variableRE[1, :], fillrange=variableRE[3, :], fillalpha=fillalpha, c=pink, label="", lw=0)
     plot!(avRE, variableRE[2, :], label=L"\mathrm{Random \,\, Edges}", lw=line_lw, c=pink)
@@ -216,22 +221,37 @@ function myplot(measure, legendplace, yaxisscale, xaxisscale, variable, variable
     plot!(avHY, variableHY[2, :], label=L"\mathrm{Hyperbolic \,\, }α=0.5, v=0.1, ζ=1", c=violet, lw=line_lw)
     plot!(avHYSB, variableHYSB[1, :], fillrange=variableHYSB[3, :], fillalpha=fillalpha, c=red, label="", lw=0)
     plot!(avHYSB, variableHYSB[2, :], label=L"\mathrm{Hyperbolic \,\, }α=1.05, v=0.8, ζ=1 ", c=red, lw=line_lw)
-    plot!(av, variable[2, :], label=L"\mathrm{Real\,\, data\,\, subjects\,\, Schaefer}", lw=line_lw, c=blue)
+    plot!(av, variable[2, :], label=L"\mathrm{Real\,\, data\,\,  Schaefer}", lw=line_lw, c=blue)
 
-    xlabel!("Average degree")
-    ylabel!("$(measure)")
+    xlabel!(L"\mathrm{Average\,\,  degree}")
+    if measure == "Temporal Clustering"
+        ylabel!(L"\mathrm{Temporal\,\,clustering \,\, coefficient \,\,} C")
+    elseif measure == "Temporal Path Length"
+        ylabel!(L"\log_{10}(\mathrm{Temporal \,\, Path \,\, length})\,\, \log_{10}(L)")
+    elseif measure == "Temporal Small Worldness"
+        ylabel!(L"\mathrm{Temporal\,\, small\,\, worldness \,\,} S")
+    elseif measure == "Temporal Small Worldness S_{SB}"
+        ylabel!(L"\mathrm{Temporal\,\, small\,\, worldness \,\,} S_{SB}")
+    elseif measure == "Temporal Correlation Coefficient"
+        ylabel!(L"\mathrm{Temporal\,\, correlation \,\, coefficient \,\,} TC")
+    end
+
     return p
 end
 
 function main()
     average_deg_quantile, clustering_quantile, path_len_quantile, small_world_quantile, small_world_SB_quantile, temp_corr_quantile, average_deg_quantile_RT, clustering_quantile_RT, path_len_quantile_RT, small_world_quantile_RT, small_world_SB_quantile_RT, temp_corr_quantile_RT, average_deg_quantile_RE, clustering_quantile_RE, path_len_quantile_RE, small_world_quantile_RE, small_world_SB_quantile_RE, temp_corr_quantile_RE, average_deg_quantile_EU, clustering_quantile_EU, path_len_quantile_EU, small_world_quantile_EU, small_world_SB_quantile_EU, temp_corr_quantile_EU, average_deg_quantile_EUB, clustering_quantile_EUB, path_len_quantile_EUB, small_world_quantile_EUB, small_world_SB_quantile_EUB, temp_corr_quantile_EUB, average_deg_quantile_HY, clustering_quantile_HY, path_len_quantile_HY, small_world_quantile_HY, small_world_SB_quantile_HY, temp_corr_quantile_HY, average_deg_quantile_HYSB, clustering_quantile_HYSB, path_len_quantile_HYSB, small_world_quantile_HYSB, small_world_SB_quantile_HYSB, temp_corr_quantile_HYSB = load_and_quantiles()
     p1 = myplot("Temporal Small Worldness", :topleft, :identity, :identity, small_world_quantile, small_world_quantile_RT, small_world_quantile_RE, small_world_quantile_EU, small_world_quantile_EUB, small_world_quantile_HY, small_world_quantile_HYSB, average_deg_quantile, average_deg_quantile_RT, average_deg_quantile_RE, average_deg_quantile_EU, average_deg_quantile_EUB, average_deg_quantile_HY, average_deg_quantile_HYSB)
-    p2 = myplot("Temporal Small Worldness SB", false, :identity, :identity, small_world_SB_quantile, small_world_SB_quantile_RT, small_world_SB_quantile_RE, small_world_SB_quantile_EU, small_world_SB_quantile_EUB, small_world_SB_quantile_HY, small_world_SB_quantile_HYSB, average_deg_quantile, average_deg_quantile_RT, average_deg_quantile_RE, average_deg_quantile_EU, average_deg_quantile_EUB, average_deg_quantile_HY, average_deg_quantile_HYSB)
+    p2 = myplot("Temporal Small Worldness S_{SB}", false, :identity, :identity, small_world_SB_quantile, small_world_SB_quantile_RT, small_world_SB_quantile_RE, small_world_SB_quantile_EU, small_world_SB_quantile_EUB, small_world_SB_quantile_HY, small_world_SB_quantile_HYSB, average_deg_quantile, average_deg_quantile_RT, average_deg_quantile_RE, average_deg_quantile_EU, average_deg_quantile_EUB, average_deg_quantile_HY, average_deg_quantile_HYSB)
     p3 = myplot("Temporal Correlation Coefficient", false, :identity, :identity, temp_corr_quantile, temp_corr_quantile_RT, temp_corr_quantile_RE, temp_corr_quantile_EU, temp_corr_quantile_EUB, temp_corr_quantile_HY, temp_corr_quantile_HYSB, average_deg_quantile, average_deg_quantile_RT, average_deg_quantile_RE, average_deg_quantile_EU, average_deg_quantile_EUB, average_deg_quantile_HY, average_deg_quantile_HYSB)
     p4 = myplot("Temporal Clustering", false, :identity, :identity, clustering_quantile, clustering_quantile_RT, clustering_quantile_RE, clustering_quantile_EU, clustering_quantile_EUB, clustering_quantile_HY, clustering_quantile_HYSB, average_deg_quantile, average_deg_quantile_RT, average_deg_quantile_RE, average_deg_quantile_EU, average_deg_quantile_EUB, average_deg_quantile_HY, average_deg_quantile_HYSB)
     p5 = myplot("Temporal Path Length", false, :log, :identity, path_len_quantile, path_len_quantile_RT, path_len_quantile_RE, path_len_quantile_EU, path_len_quantile_EUB, path_len_quantile_HY, path_len_quantile_HYSB, average_deg_quantile, average_deg_quantile_RT, average_deg_quantile_RE, average_deg_quantile_EU, average_deg_quantile_EUB, average_deg_quantile_HY, average_deg_quantile_HYSB)
     p = plot(p1, p2, p3, p4, p5, layout=(5, 1), size=(800, 3000), margin=25mm)
-
+    display(p1)
+    display(p2)
+    display(p3)
+    display(p4)
+    display(p5)
     savefig(p1, "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/images/tsw.png")
     savefig(p2, "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/images/tswsb.png")
     savefig(p3, "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/images/tcc.png")
