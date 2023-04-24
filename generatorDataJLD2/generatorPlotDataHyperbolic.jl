@@ -8,8 +8,8 @@ include("../src/measuresStruct.jl")
 #Rrange=collect(0.5:0.5:14)
 Rrange=collect(0:0.5:18)
 velocities=collect(0.1:0.1:0.9)
-velocities=[0.8]
-αrange=[1.05]
+velocities=[0.9]
+αrange=[0.8]
 Threads.@threads for n in 1:10
     for a in 1:length(αrange)
         @time begin
@@ -27,7 +27,7 @@ Threads.@threads for n in 1:10
                 end
                 println("v:$(i)")
             end
-            @save "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/data/hyperbolic_300_alpha_$(round(Int,αrange[a]*100))_R_0_05_18_v_$(round(Int,velocities[1]*100))_$(n).jld2" avHY clHY plHY tccHY Rrange αrange velocities
+            @save "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/data_correct/hyperbolic_300_alpha_$(round(Int,αrange[a]*100))_R_0_05_18_v_$(round(Int,velocities[1]*100))_$(n).jld2" avHY clHY plHY tccHY Rrange αrange velocities
             println("alpha:$(a)")
         end
     end

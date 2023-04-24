@@ -5,7 +5,7 @@ include("../src/measuresStruct.jl")
 
 thresholds=append!(collect(0.2:0.05:0.90),collect(0.92:0.02:0.98))
 velocities=collect(0.1:0.1:0.9)
-velocities=[0.3]
+velocities=[0.2]
 subjects = readdlm("/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/src/filtered-subjects-mod.txt", Int)
 avall=zeros(length(subjects),size(thresholds)[1])
 
@@ -32,6 +32,6 @@ Threads.@threads for n in 1:10
             tccEU[i,j]=temporalCorrelationCoefficient(eu)
         end
     end
-    @save "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/data/euclidean_300_thre_02_005_098_v01_$(n).jld2" avEU clEU plEU tccEU thresholds velocities
+    @save "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/data_correct/euclidean_300_thre_02_005_098_v02_$(n).jld2" avEU clEU plEU tccEU thresholds velocities
 
 end
