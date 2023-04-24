@@ -72,14 +72,14 @@ end
 #COMPUTE INTEGRAL DISTANCE HYPERBOLIC AND DATA CURVES
 function compute_integral_hyperbolic(average_deg_quantile, average_deg_HY, variable_fMRI, variable_HY, len_vel=length(velocities), len_α=length(αrange))
     integral = zeros(len_vel, len_α)
-    range = collect(10:0.2:160)
+    range = collect(10:0.01:160)
     for a in 1:len_α
         for i in 1:len_vel
             spline = linear_interpolation(sort(average_deg_HY[i, :, a]), variable_HY[i, sortperm(average_deg_HY[i, :, a]), a])
             spline_fMRI = linear_interpolation(sort(average_deg_quantile), variable_fMRI[2, sortperm(average_deg_quantile)])
             diffmy = abs.(spline(range) .- spline_fMRI(range))
             diffspline = linear_interpolation(range, diffmy)
-            integral[i, a], _ = quadgk(diffspline, range[1], range[2])
+            integral[i, a], _ = quadgk(diffspline, range[1], range[end])
         end
     end
     return integral
@@ -97,13 +97,13 @@ end
 
 function compute_integral_euclidean(average_deg_quantile, variable_fMRI, average_deg_EU, variable_EU, len_vel, len_thre)
     integral_euclidean = zeros(len_vel)
-    range = collect(10:0.2:160)
+    range = collect(10:0.01:160)
     for i in 1:len_vel
         spline = linear_interpolation(sort(average_deg_EU[i, :]), variable_EU[i, sortperm(average_deg_EU[i, :])])
         spline_fMRI = linear_interpolation(sort(average_deg_quantile), variable_fMRI[2, sortperm(average_deg_quantile)])
         diffmy = abs.(spline(range) .- spline_fMRI(range))
         diffspline = linear_interpolation(range, diffmy)
-        integral_euclidean[i], _ = quadgk(diffspline, range[1], range[2])
+        integral_euclidean[i], _ = quadgk(diffspline, range[1], range[end])
     end
     return integral_euclidean
 end
@@ -143,8 +143,8 @@ function main()
     println("Indices: ", indices)
     avEU, clEU, plEU, tccEU = load_euclidean_data()
     avEUb, clEUb, plEUb, tccEUb = load_euclideanBorder_data()
-    integral_euclidean = compute_integral_euclidean(average_deg_quantile, small_world_SB_quantile, avEU, tccEU ./ plEU, length(velocities), length(thresholds))
-    integral_euclidean_border = compute_integral_euclidean(average_deg_quantile, small_world_SB_quantile, avEUb, tccEUb ./ plEUb, length(velocities), length(thresholds))
+    integral_euclidean = compute_integral_euclidean(average_deg_quantile, small_world_quantile, avEU, clEU ./ plEU, length(velocities), length(thresholds))
+    integral_euclidean_border = compute_integral_euclidean(average_deg_quantile, small_world_quantile, avEUb, clEUb ./ plEUb, length(velocities), length(thresholds))
     minimum_area, best_velocity, indices = find_minimum_v(integral_euclidean, velocities)
     println("Minimum area euclidean: ", minimum_area)
     println("Best velocity euclidean: ", best_velocity)
@@ -153,7 +153,6 @@ function main()
     println("Minimum area euclidean border: ", minimum_area)
     println("Best velocity euclidean border: ", best_velocity)
     println("Indices euclidean border: ", indices)
-    myplot()
 end
 #CHANGE AND COMPUTE ONLY THINGS FOR SW
 
