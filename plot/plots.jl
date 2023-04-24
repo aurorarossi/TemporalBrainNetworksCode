@@ -66,7 +66,7 @@ function load_euclidean_data(len)
     temp_corr_all = zeros(10, len)
     # load data
     for i in 1:10
-        @load "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/data/euclidean_300_thre_02_005_098_v01_$(i).jld2" avEU clEU plEU tccEU
+        @load "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/data_correct/euclidean_300_thre_02_005_098_v02_$(i).jld2" avEU clEU plEU tccEU
         average_deg_all[i, :] = avEU
         clustering_all[i, :] = clEU
         path_len_all[i, :] = plEU
@@ -82,7 +82,7 @@ function load_euclideanBorder_data(len)
     temp_corr_all = zeros(10, len)
     # load data
     for i in 1:10
-        @load "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/data/euclideanBorder_300_r_0_005_08_v01_$(i).jld2" avEU clEU plEU tccEU
+        @load "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/data_correct/euclideanBorder_300_r_0_005_08_v01_$(i).jld2" avEU clEU plEU tccEU
         average_deg_all[i, :] = avEU
         clustering_all[i, :] = clEU
         path_len_all[i, :] = plEU
@@ -99,7 +99,7 @@ function load_hyperbolic_data(len)
     temp_corr_all = zeros(10, len)
     # load data
     for i in 1:10
-        @load "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/data/hyperbolic_300_alpha_50_R_0_05_18_v_10_$(i).jld2" avHY clHY plHY tccHY
+        @load "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/data_correct/hyperbolic_300_alpha_65_R_0_05_18_v_60_$(i).jld2" avHY clHY plHY tccHY
         average_deg_all[i, :] = avHY
         clustering_all[i, :] = clHY
         path_len_all[i, :] = plHY
@@ -116,7 +116,7 @@ function load_hyperbolic_SB_data(len)
     temp_corr_all = zeros(10, len)
     # load data
     for i in 1:10
-        @load "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/data/hyperbolic_300_alpha_105_R_0_05_18_v_80_$(i).jld2" avHY clHY plHY tccHY
+        @load "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/data_correct/hyperbolic_300_alpha_80_R_0_05_18_v_90_$(i).jld2" avHY clHY plHY tccHY
         average_deg_all[i, :] = avHY
         clustering_all[i, :] = clHY
         path_len_all[i, :] = plHY
@@ -214,13 +214,13 @@ function myplot(measure, legendplace, yaxisscale, xaxisscale, variable, variable
     plot!(avRT, variableRT[1, :], fillrange=variableRT[3, :], fillalpha=fillalpha, c=grey, label="", lw=0)
     plot!(avRT, variableRT[2, :], label=L"\mathrm{Random \,\,times}", lw=line_lw, c=grey)
     plot!(avEU, variableEU[1, :], fillrange=variableEU[3, :], fillalpha=fillalpha, c=orange, label="", lw=0)
-    plot!(avEU, variableEU[2, :], label=L"\mathrm{Random \,\, torus \,\,} v=0.3", lw=line_lw, c=orange)
+    plot!(avEU, variableEU[2, :], label=L"\mathrm{Random \,\, torus \,\,} v=0.2", lw=line_lw, c=orange)
     plot!(avEUB, variableEUB[1, :], fillrange=variableEUB[3, :], fillalpha=fillalpha, c=green, label="", lw=0)
-    plot!(avEUB, variableEUB[2, :], label=L"\mathrm{Random \,\, square \,\,} v=0.4", lw=line_lw, c=green,)
+    plot!(avEUB, variableEUB[2, :], label=L"\mathrm{Random \,\, square \,\,} v=0.1", lw=line_lw, c=green,)
     plot!(avHY, variableHY[1, :], fillrange=variableHY[3, :], fillalpha=fillalpha, c=violet, label="", lw=0)
-    plot!(avHY, variableHY[2, :], label=L"\mathrm{Hyperbolic \,\, }α=0.5, v=0.1, ζ=1", c=violet, lw=line_lw)
+    plot!(avHY, variableHY[2, :], label=L"\mathrm{Hyperbolic \,\, }α=0.65, v=0.6, ζ=1", c=violet, lw=line_lw)
     plot!(avHYSB, variableHYSB[1, :], fillrange=variableHYSB[3, :], fillalpha=fillalpha, c=red, label="", lw=0)
-    plot!(avHYSB, variableHYSB[2, :], label=L"\mathrm{Hyperbolic \,\, }α=1.05, v=0.8, ζ=1 ", c=red, lw=line_lw)
+    plot!(avHYSB, variableHYSB[2, :], label=L"\mathrm{Hyperbolic \,\, }α=0.8, v=0.9, ζ=1 ", c=red, lw=line_lw)
     plot!(av, variable[2, :], label=L"\mathrm{Real\,\, data\,\,  Schaefer}", lw=line_lw, c=blue)
 
     xlabel!(L"\mathrm{Average\,\,  degree}")
