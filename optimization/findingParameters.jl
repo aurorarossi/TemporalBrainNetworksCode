@@ -127,7 +127,7 @@ end
 
 function main()
     thresholds = append!(collect(0.2:0.05:0.90), collect(0.92:0.02:0.98))
-    subjects = readdlm("TemporalBrainNetworksCode/src/filtered-subjects-mod.txt", Int)
+    subjects = readdlm("src/filtered-subjects-mod.txt", Int)
     Rrange = collect(0.5:0.5:14)
     average_deg_all, clustering_all, path_len_all, temp_clustering_all = load_fMRI_data(subjects, thresholds)
     average_deg_quantile, clustering_quantile, path_len_quantile, small_world_quantile, small_world_SB_quantile, temp_clustering_quantile = compute_quantiles(average_deg_all, clustering_all, path_len_all, temp_clustering_all, thresholds)
@@ -158,7 +158,7 @@ end
 #CHANGE AND COMPUTE ONLY THINGS FOR SW
 
 function myplot()
-    subjects= readdlm("TemporalBrainNetworksCode/src/filtered-subjects-mod.txt", Int)
+    subjects= readdlm("src/filtered-subjects-mod.txt", Int)
     Rrange = collect(0.5:0.5:14)
     thresholds = append!(collect(0.2:0.05:0.90), collect(0.92:0.02:0.98))
     average_deg_all, clustering_all, path_len_all, temp_clustering_all = load_fMRI_data(subjects, thresholds)

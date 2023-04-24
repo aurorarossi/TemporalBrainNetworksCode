@@ -1,5 +1,5 @@
 abstract type TemporalNetwork end
-using LightGraphs
+
 function averageDegree(network::TemporalNetwork)::Float64
     averagedegree=0
     for t in 1:network.number_snapshots
