@@ -168,7 +168,7 @@ function load_and_quantiles()
 end
 
 function compute_integral(average_deg_MOD, measure_MOD, average_fMRI, measure_fMRI)
-    range = (1.5:0.01:160)
+    range = (1.4:0.01:170)
     spline = linear_interpolation(sort(average_deg_MOD), measure_MOD[sortperm(average_deg_MOD)])
     spline_fMRI = linear_interpolation(sort(average_fMRI), measure_fMRI[sortperm(average_fMRI)])
     diffmy = abs.(spline(range) .- spline_fMRI(range))
