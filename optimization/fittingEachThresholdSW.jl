@@ -133,7 +133,7 @@ function main()
     average_deg_all, clustering_all, path_len_all, temp_corr_all = load_fMRI_data(subjects, thresholds)
     average_deg_quantile, clustering_quantile, path_len_quantile, small_world_quantile, small_world_SB_quantile, temp_corr_quantile = compute_quantiles(average_deg_all, clustering_all, path_len_all, temp_corr_all, length(thresholds))
 
-    p = Plots.scatter(average_deg_quantile,small_world_quantile[2,:],c=2, palette=:Set1_9, legendfontsize=12, xlims=(0, 170), grid=false,xticks = ([0, 50, 100, 150, 200], [L"0", L"50", L"100", L"150", L"200"]), yticks = ([0, 0.25, 0.5,0.75,1], [L"0", L"0.25", L"0.5", L"0.75",L"1"]),markersize=5.3,markerstrokewidth=0.6,label=L"\mathrm{Real\,\, data\,\,  Schaefer}", dpi=1200)
+    p = Plots.scatter(average_deg_quantile,small_world_quantile[2,:],c=2, palette=:Set1_9, legendfontsize=12, xlims=(0, 170), grid=false,xticks = ([0, 50, 100, 150, 200], [L"0", L"50", L"100", L"150", L"200"]), yticks = ([ 0.25, 0.5,0.75,1], [ L"0.25", L"0.5", L"0.75",L"1"]),markersize=5.3,markerstrokewidth=0.6,label=L"\mathrm{Real\,\, data\,\,  Schaefer}", dpi=1200)
     ylabel!(L"\mathrm{Temporal\,\, small\,\, worldness \,\,} S")
     xlabel!(L"\mathrm{Average\,\,  degree}")
     plot_euclideanBorder(thresholds,velocities,radiusRange, average_deg_quantile, small_world_quantile,p)
