@@ -19,5 +19,5 @@ end
 
 points=mapslices(x->mean(x),res,dims=2)
 
-p=plot(velocities,points,grid=false,xticks = ([ 0.2, 0.4, 0.6, 0.8], [ L"0.2", L"0.4", L"0.6", L"0.8"]),yticks = ([70, 75,80, 85, 90,95 ], [L"70\%", L"75\%", L"80\%", L"85\%", L"90\%",L"95\%"]),color=:black,lw=1.5,legend=false,xlabel=L"Velocity",ylabel=L"\mathrm{Percentage\,\, equal \,\, consecutive \,\,edges}", dpi=1200)
+p=plot(velocities,points,grid=false,xticks = ([ 0.2, 0.4, 0.6, 0.8], [ L"0.2", L"0.4", L"0.6", L"0.8"]),yticks = ([70, 75,80, 85, 90,95 ], [L"70\%", L"75\%", L"80\%", L"85\%", L"90\%",L"95\%"]),color=:black,lw=1.5,legend=false,xlabel=L"v",ylabel=L"\mathrm{Percentage\,\, equal \,\, consecutive \,\,edges}", dpi=1200)
 savefig(p, "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/images/velocities.png")
