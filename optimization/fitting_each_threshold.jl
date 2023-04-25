@@ -110,7 +110,7 @@ end
 
 
 p=Plots.plot()
-p=scatter!(avquatile,smquantile[2,:],label="Real data",color=:blue)
+p=scatter!(avquatile,smquantile[2,:],color=:blue)
 #p=scatter()
 
 for j in 1:length(radiusRange)
@@ -120,7 +120,7 @@ for j in 1:length(radiusRange)
 
     spline_euB=Spline1D(sort(avEU[index_euB,:]),clEU[index_euB,:]./plEU[index_euB,:])
 
-    p=scatter!([avquatile[j]], [evaluate(spline_euB,avquatile[j])],color=:orange,alpha=.5,markershape=:hexagon,label="EuclideanBorder speed=$(velocities[index_euB])")
+    p=scatter!([avquatile[j]], [evaluate(spline_euB,avquatile[j])],color=:orange,alpha=.5,markershape=:hexagon)
 
 
 end 
@@ -133,8 +133,8 @@ for j in 1:length(thresholds)
     varvect=clHY[index[1],:]./plHY[index[1],:]
     spline=Spline1D(sort(reverse(avHY[index[1],:])),reverse(varvect))
     spline_eu=Spline1D(sort(reverse(avEU[index_eu,:])),reverse(clEU[index_eu,:]./plEU[index_eu,:]))
-    p=scatter!([avquatile[j]], [evaluate(spline,avquatile[j])],color=:red,alpha=.5,markershape=:star5,label="Hyperbolic alpha=$(αrange[index[2]]),speed=$(velocities[index[1]])")
-    p=scatter!([avquatile[j]], [evaluate(spline_eu,avquatile[j])],color=:green,alpha=.5,markershape=:rect,label="Euclidean speed=$(velocities[index_eu])",xlims=(0,165))
+    p=scatter!([avquatile[j]], [evaluate(spline,avquatile[j])],color=:red,alpha=.5,markershape=:star5)
+    p=scatter!([avquatile[j]], [evaluate(spline_eu,avquatile[j])],color=:green,alpha=.5,markershape=:rect,xlims=(0,165), legend = false)
     
 
     
