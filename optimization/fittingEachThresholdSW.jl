@@ -74,7 +74,7 @@ function plot_hyperbolic(thresholds,velocities,αrange, average_deg_quantile, sm
     @load "/user/aurossi/home/mri_networks/hyperbolicbrains/optimization/hyperbolic_300_alpha_$(round(Int,αrange[index[2]]*100))_R_05_05_14_v_01_01_09_correct.jld2" avHY clHY plHY tccHY 
     varvect=clHY[index[1],:]./plHY[index[1],:]
     spline=Spline1D(sort(reverse(avHY[index[1],:])),reverse(varvect))
-    scatter!(p,[average_deg_quantile[end]], [evaluate(spline,average_deg_quantile[end])],color=1,alpha=0.75,markersize=4,markerstrokewidth=0.6,markershape=:diamond, label=L"\mathrm{RTHG}")
+    scatter!(p,[average_deg_quantile[end]], [evaluate(spline,average_deg_quantile[end])],color=1,alpha=0.75,markersize=4,markerstrokewidth=0.6,markershape=:diamond, label=L"\mathrm{RTH}")
 
 end
 
@@ -97,7 +97,7 @@ function plot_euclidean(thresholds,velocities, average_deg_quantile, small_world
     index_eu=argmin(alld_euclidean[:,end])
     @load "/user/aurossi/home/mri_networks/hyperbolicbrains/optimization/euclidean_300_thre_02_005_098.jld2" avEU clEU plEU tccEU 
     spline_eu=Spline1D(sort(reverse(avEU[index_eu,:])),reverse(clEU[index_eu,:]./plEU[index_eu,:]))
-    scatter!(p,[average_deg_quantile[end]], [evaluate(spline_eu,average_deg_quantile[end])],color=5,alpha=0.75,markersize=4,markerstrokewidth=0.6,markershape=:rect, label= L"\mathrm{RTTG}")
+    scatter!(p,[average_deg_quantile[end]], [evaluate(spline_eu,average_deg_quantile[end])],color=5,alpha=0.75,markersize=4,markerstrokewidth=0.6,markershape=:rect, label= L"\mathrm{RTT}")
 end
 
 function plot_euclideanBorder(thresholds,velocities,radiusRange, average_deg_quantile, small_world_quantile,p)
@@ -119,7 +119,7 @@ function plot_euclideanBorder(thresholds,velocities,radiusRange, average_deg_qua
     index_euB=argmin(alld_euclideanBorder[:,end])
     @load "/user/aurossi/home/mri_networks/hyperbolicbrains/optimization/euclideanBorder_300_r_0_005_08.jld2" avEU clEU plEU tccEU 
     spline_euB=Spline1D(sort(avEU[index_euB,:]),clEU[index_euB,:]./plEU[index_euB,:])
-    scatter!(p,[average_deg_quantile[end]], [evaluate(spline_euB,average_deg_quantile[end])],color=3,alpha=0.75,markersize=4,markerstrokewidth=0.6,markershape=:hexagon,label=L"\mathrm{RTSG}")
+    scatter!(p,[average_deg_quantile[end]], [evaluate(spline_euB,average_deg_quantile[end])],color=3,alpha=0.75,markersize=4,markerstrokewidth=0.6,markershape=:hexagon,label=L"\mathrm{RTS}")
 end
 
 
