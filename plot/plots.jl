@@ -1,6 +1,6 @@
 using NPZ, Random, Distributions, LinearAlgebra, Permutations, Plots, JLD2, Statistics, DelimitedFiles, Interpolations, QuadGK, LaTeXStrings, Measures
 
-# LOAD DATA 
+# LOAD DATA
 function load_fMRI_data(subjects, thresholds)
     # initialize variables
     len_sub = length(subjects)
@@ -219,8 +219,8 @@ function myplot(measure, legendplace, yaxisscale, xaxisscale, variable, variable
     plot!(avEUB, variableEUB[2, :], label=L"\textrm{RTS \,\,}v=0.1", lw=line_lw, c=green,)
     plot!(avHY, variableHY[1, :], fillrange=variableHY[3, :], fillalpha=fillalpha, c=violet, label="", lw=0)
     plot!(avHY, variableHY[2, :], label=L"\textrm{RTH \,\,} α=0.65, v=0.6, ζ=1", c=violet, lw=line_lw)
-    plot!(avHYSB, variableHYSB[1, :], fillrange=variableHYSB[3, :], fillalpha=fillalpha, c=red, label="", lw=0)
-    plot!(avHYSB, variableHYSB[2, :], label=L"\textrm{RTH \,\,} α=0.8, v=0.9, ζ=1 ", c=red, lw=line_lw)
+    #plot!(avHYSB, variableHYSB[1, :], fillrange=variableHYSB[3, :], fillalpha=fillalpha, c=red, label="", lw=0)
+    # plot!(avHYSB, variableHYSB[2, :], label=L"\textrm{RTH \,\,} α=0.8, v=0.9, ζ=1 ", c=red, lw=line_lw)
     plot!(av, variable[2, :], label=L"\mathrm{Real\,\, data\,\,  Schaefer}", lw=line_lw, c=blue)
 
     xlabel!(L"\mathrm{Average\,\,  degree}")
@@ -252,11 +252,11 @@ function main()
     # display(p3)
     # display(p4)
     # display(p5)
-    savefig(p1, "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/images/tsw.png")
-    savefig(p2, "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/images/tswsb.png")
-    savefig(p3, "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/images/tcc.png")
-    savefig(p4, "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/images/tclustering.png")
-    savefig(p5, "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/images/tpath.png")
+    savefig(p1, "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/images/tswCN.png")
+    # savefig(p2, "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/images/tswsb.png")
+    # savefig(p3, "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/images/tcc.png")
+    # savefig(p4, "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/images/tclustering.png")
+    # savefig(p5, "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/images/tpath.png")
 end
 
 main()
