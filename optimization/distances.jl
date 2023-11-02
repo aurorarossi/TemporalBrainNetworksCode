@@ -1,3 +1,4 @@
+using NPZ, Random, Distributions,LinearAlgebra,Permutations,Plots,JLD2,Statistics, DelimitedFiles,Dierckx, Interpolations, QuadGK
 # LOAD DATA 
 function load_fMRI_data(subjects, thresholds)
     # initialize variables
@@ -197,27 +198,34 @@ println("EU",compute_integral(average_deg_quantile_EU, small_world_quantile_EU[2
 println("RE",compute_integral(average_deg_quantile_RE, small_world_quantile_RE[2,:], average_deg_quantile, small_world_quantile[2,:]))
 println("RT",compute_integral(average_deg_quantile_RT, small_world_quantile_RT[2,:], average_deg_quantile, small_world_quantile[2,:]))
 
-# #clustering
-# compute_integral(average_deg_quantile_HYSB, clustering_quantile_HYSB, average_deg_quantile, clustering_quantile)
-# compute_integral(average_deg_quantile_HY, clustering_quantile_HY, average_deg_quantile, clustering_quantile)
-# compute_integral(average_deg_quantile_EUB, clustering_quantile_EUB, average_deg_quantile, clustering_quantile)
-# compute_integral(average_deg_quantile_EU, clustering_quantile_EU, average_deg_quantile, clustering_quantile)
-# compute_integral(average_deg_quantile_RE, clustering_quantile_RE, average_deg_quantile, clustering_quantile)
-# compute_integral(average_deg_quantile_RT, clustering_quantile_RT, average_deg_quantile, clustering_quantile)
+#different norms of small worldness
 
-# #temporal correlation
-# compute_integral(average_deg_quantile_HYSB, temp_corr_quantile_HYSB, average_deg_quantile, temp_corr_quantile)
-# compute_integral(average_deg_quantile_HY, temp_corr_quantile_HY, average_deg_quantile, temp_corr_quantile)
-# compute_integral(average_deg_quantile_EUB, temp_corr_quantile_EUB, average_deg_quantile, temp_corr_quantile)
-# compute_integral(average_deg_quantile_EU, temp_corr_quantile_EU, average_deg_quantile, temp_corr_quantile)
-# compute_integral(average_deg_quantile_RE, temp_corr_quantile_RE, average_deg_quantile, temp_corr_quantile)
-# compute_integral(average_deg_quantile_RT, temp_corr_quantile_RT, average_deg_quantile, temp_corr_quantile)
 
-# #path length
-# compute_integral(average_deg_quantile_HYSB, path_len_quantile_HYSB, average_deg_quantile, path_len_quantile)
-# compute_integral(average_deg_quantile_HY, path_len_quantile_HY, average_deg_quantile, path_len_quantile)
-# compute_integral(average_deg_quantile_EUB, path_len_quantile_EUB, average_deg_quantile, path_len_quantile)
-# compute_integral(average_deg_quantile_EU, path_len_quantile_EU, average_deg_quantile, path_len_quantile)
-# compute_integral(average_deg_quantile_RE, path_len_quantile_RE, average_deg_quantile, path_len_quantile)
-# compute_integral(average_deg_quantile_RT, path_len_quantile_RT, average_deg_quantile, path_len_quantile)
+function compute_norm(p,average_deg_MOD, measure_MOD, average_fMRI, measure_fMRI)
+    range = (1.4:0.01:170)
+    spline = linear_interpolation(sort(average_deg_MOD), measure_MOD[sortperm(average_deg_MOD)])
+    spline_fMRI = linear_interpolation(sort(average_fMRI), measure_fMRI[sortperm(average_fMRI)])
+    x = spline(range) .- spline_fMRI(range)
+    return norm(x, p)
+end
 
+
+#small worldness SB
+p =  2
+println("Norm p = ", p)
+println("SWSB")
+println(compute_norm(p,average_deg_quantile_HYSB, small_world_SB_quantile_HYSB[2,:], average_deg_quantile, small_world_SB_quantile[2,:]))
+println(compute_norm(p,average_deg_quantile_HY, small_world_SB_quantile_HY[2,:], average_deg_quantile, small_world_SB_quantile[2,:]))
+println(compute_norm(p,average_deg_quantile_EUB, small_world_SB_quantile_EUB[2,:], average_deg_quantile, small_world_SB_quantile[2,:]))
+println(compute_norm(p,average_deg_quantile_EU, small_world_SB_quantile_EU[2,:], average_deg_quantile, small_world_SB_quantile[2,:]))
+println(compute_norm(p,average_deg_quantile_RE, small_world_SB_quantile_RE[2,:], average_deg_quantile, small_world_SB_quantile[2,:]))
+println(compute_norm(p,average_deg_quantile_RT, small_world_SB_quantile_RT[2,:], average_deg_quantile, small_world_SB_quantile[2,:]))
+
+#small worldness
+println("SW")
+println("HYSB ",compute_norm(p,average_deg_quantile_HYSB, small_world_quantile_HYSB[2,:], average_deg_quantile, small_world_quantile[2,:]))
+println("HY ",compute_norm(p,average_deg_quantile_HY, small_world_quantile_HY[2,:], average_deg_quantile, small_world_quantile[2,:]))
+println("EUB ",compute_norm(p,average_deg_quantile_EUB, small_world_quantile_EUB[2,:], average_deg_quantile, small_world_quantile[2,:]))
+println("EU ",compute_norm(p,average_deg_quantile_EU, small_world_quantile_EU[2,:], average_deg_quantile, small_world_quantile[2,:]))
+println("RE ",compute_norm(p,average_deg_quantile_RE, small_world_quantile_RE[2,:], average_deg_quantile, small_world_quantile[2,:]))
+println("RT ",compute_norm(p,average_deg_quantile_RT, small_world_quantile_RT[2,:], average_deg_quantile, small_world_quantile[2,:]))

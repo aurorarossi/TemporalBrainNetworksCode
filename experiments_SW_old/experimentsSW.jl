@@ -13,9 +13,9 @@ end
 
 number_nodes = 150
 number_snapshots = 50
-deg =  75
+deg =  20
 
-betas = [0.0001,0.0005,0.001,0.01,0.02,0.07,0.1,0.2,0.5,1.0]
+
 
 graphs =  Vector{WattsStrogatz}(undef, 10)
 tcc = Vector{Float64}(undef, 10)
