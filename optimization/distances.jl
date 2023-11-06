@@ -206,7 +206,11 @@ function compute_norm(p,average_deg_MOD, measure_MOD, average_fMRI, measure_fMRI
     spline = linear_interpolation(sort(average_deg_MOD), measure_MOD[sortperm(average_deg_MOD)])
     spline_fMRI = linear_interpolation(sort(average_fMRI), measure_fMRI[sortperm(average_fMRI)])
     x = spline(range) .- spline_fMRI(range)
-    return norm(x, p)
+    if abs.(p) != Inf
+        return norm(x, p)./length(range)
+    else
+        return norm(x, p)
+    end
 end
 
 
