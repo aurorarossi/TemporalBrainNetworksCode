@@ -66,7 +66,7 @@ function load_euclidean_data(len)
     temp_corr_all = zeros(10, len)
     # load data
     for i in 1:10
-        @load "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/data_correct/euclidean_300_thre_02_005_098_v02_$(i).jld2" avEU clEU plEU tccEU
+        @load "data/euclidean_300_thre_02_005_098_v02_$(i).jld2" avEU clEU plEU tccEU
         average_deg_all[i, :] = avEU
         clustering_all[i, :] = clEU
         path_len_all[i, :] = plEU
@@ -74,6 +74,7 @@ function load_euclidean_data(len)
     end
     return average_deg_all, clustering_all, path_len_all, temp_corr_all
 end
+
 function load_euclideanBorder_data(len)
     # initialize variables
     average_deg_all = zeros(10, len)
@@ -82,7 +83,7 @@ function load_euclideanBorder_data(len)
     temp_corr_all = zeros(10, len)
     # load data
     for i in 1:10
-        @load "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/data_correct/euclideanBorder_300_r_0_005_08_v01_$(i).jld2" avEU clEU plEU tccEU
+        @load "data/euclideanBorder_300_r_0_005_08_v01_$(i).jld2" avEU clEU plEU tccEU
         average_deg_all[i, :] = avEU
         clustering_all[i, :] = clEU
         path_len_all[i, :] = plEU
@@ -99,7 +100,7 @@ function load_hyperbolic_data(len)
     temp_corr_all = zeros(10, len)
     # load data
     for i in 1:10
-        @load "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/data_correct/hyperbolic_300_alpha_65_R_0_05_18_v_60_$(i).jld2" avHY clHY plHY tccHY
+        @load "data/hyperbolic_300_alpha_65_R_0_05_18_v_60_$(i).jld2" avHY clHY plHY tccHY
         average_deg_all[i, :] = avHY
         clustering_all[i, :] = clHY
         path_len_all[i, :] = plHY
@@ -116,7 +117,7 @@ function load_hyperbolic_SB_data(len)
     temp_corr_all = zeros(10, len)
     # load data
     for i in 1:10
-        @load "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/data_correct/hyperbolic_300_alpha_80_R_0_05_18_v_90_$(i).jld2" avHY clHY plHY tccHY
+        @load "data/hyperbolic_300_alpha_80_R_0_05_18_v_90_$(i).jld2" avHY clHY plHY tccHY
         average_deg_all[i, :] = avHY
         clustering_all[i, :] = clHY
         path_len_all[i, :] = plHY
@@ -202,12 +203,12 @@ function myplot(measure, legendplace, yaxisscale, xaxisscale, variable, variable
     orange = 5
     violet = 4
     grey = 9
-    if measure !="Temporal Path Length"
-        yticks = ([0, 0.25, 0.5,0.75,1], [L"0", L"0.25", L"0.5", L"0.75",L"1"])
+    if measure != "Temporal Path Length"
+        yticks = ([0, 0.25, 0.5, 0.75, 1], [L"0", L"0.25", L"0.5", L"0.75", L"1"])
     else
-        yticks = ([10^0,10^1], [L"10^0", L"10^1"])
+        yticks = ([10^0, 10^1], [L"10^0", L"10^1"])
     end
-    p = plot(av, variable[1, :], fillrange=variable[3, :], fillalpha=fillalpha, c=blue, label="", lw=0, palette=:Set1_9, legend=legendplace, legendfontsize=12, xlims=(0, 170), grid=false, dpi=1200, yaxis=yaxisscale, xaxis=xaxisscale, xticks = ([0, 50, 100, 150, 200], [L"0", L"50", L"100", L"150", L"200"]), yticks = yticks)
+    p = plot(av, variable[1, :], fillrange=variable[3, :], fillalpha=fillalpha, c=blue, label="", lw=0, palette=:Set1_9, legend=legendplace, legendfontsize=12, xlims=(0, 170), grid=false, dpi=1200, yaxis=yaxisscale, xaxis=xaxisscale, xticks=([0, 50, 100, 150, 200], [L"0", L"50", L"100", L"150", L"200"]), yticks=yticks)
 
     plot!(avRE, variableRE[1, :], fillrange=variableRE[3, :], fillalpha=fillalpha, c=pink, label="", lw=0)
     plot!(avRE, variableRE[2, :], label=L"\textrm{RTE}", lw=line_lw, c=pink)
@@ -252,11 +253,11 @@ function main()
     # display(p3)
     # display(p4)
     # display(p5)
-    savefig(p1, "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/images/tsw.png")
-    savefig(p2, "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/images/tswsb.png")
-    savefig(p3, "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/images/tcc.png")
-    savefig(p4, "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/images/tclustering.png")
-    savefig(p5, "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/images/tpath.png")
+    savefig(p1, "images/tsw.png")
+    savefig(p2, "images/tswsb.png")
+    savefig(p3, "images/tcc.png")
+    savefig(p4, "images/tclustering.png")
+    savefig(p5, "images/tpath.png")
 end
 
 main()
