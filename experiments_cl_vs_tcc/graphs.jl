@@ -1,5 +1,7 @@
 using Graphs
 
+# struct for StarGraph, RandomDense and SwappingTriangle graphs
+
 abstract type TemporalNetwork end
 
 struct StarGraph <: TemporalNetwork
