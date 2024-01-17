@@ -1,6 +1,4 @@
-
 using Test
-
 
 testsmodels=["euclideanStruct","hyperbolicStruct"]
 tests=["measuresStruct"]
