@@ -41,15 +41,10 @@ function compute_quantiles(average_deg_all, clustering_all, path_len_all, temp_c
     return average_deg_quantile, clustering_quantile, path_len_quantile, small_world_quantile, small_world_SB_quantile, temp_corr_quantile
 end
 
-
-
-
-
-
 function plot_hyperbolic(thresholds,velocities,αrange, average_deg_quantile, small_world_quantile, p)
     alld=zeros(length(thresholds),length(velocities),length(αrange))
     for a in 1:length(αrange)
-        @load "/user/aurossi/home/mri_networks/hyperbolicbrains/optimization/hyperbolic_300_alpha_$(round(Int,αrange[a]*100))_R_05_05_14_v_01_01_09_correct.jld2" avHY clHY plHY tccHY 
+        @load "../hyperbolicbrains/optimization/hyperbolic_300_alpha_$(round(Int,αrange[a]*100))_R_05_05_14_v_01_01_09_correct.jld2" avHY clHY plHY tccHY 
         avHYvect=zeros(length(velocities),length(thresholds))
         varvect=zeros(length(velocities),length(thresholds))
         avHYvect=avHY[:,:]
@@ -65,13 +60,13 @@ function plot_hyperbolic(thresholds,velocities,αrange, average_deg_quantile, sm
     end
     for j in 1:length(thresholds)-1
         index=argmin(alld[j,:,:])
-        @load "/user/aurossi/home/mri_networks/hyperbolicbrains/optimization/hyperbolic_300_alpha_$(round(Int,αrange[index[2]]*100))_R_05_05_14_v_01_01_09_correct.jld2" avHY clHY plHY tccHY 
+        @load "../hyperbolicbrains/optimization/hyperbolic_300_alpha_$(round(Int,αrange[index[2]]*100))_R_05_05_14_v_01_01_09_correct.jld2" avHY clHY plHY tccHY 
         varvect=clHY[index[1],:]./plHY[index[1],:]
         spline=Spline1D(sort(reverse(avHY[index[1],:])),reverse(varvect))
         scatter!(p,[average_deg_quantile[j]], [evaluate(spline,average_deg_quantile[j])],color=1,alpha=0.75,markersize=4,markerstrokewidth=0.6,markershape=:diamond,label="")
     end
     index=argmin(alld[end,:,:])
-    @load "/user/aurossi/home/mri_networks/hyperbolicbrains/optimization/hyperbolic_300_alpha_$(round(Int,αrange[index[2]]*100))_R_05_05_14_v_01_01_09_correct.jld2" avHY clHY plHY tccHY 
+    @load "../hyperbolicbrains/optimization/hyperbolic_300_alpha_$(round(Int,αrange[index[2]]*100))_R_05_05_14_v_01_01_09_correct.jld2" avHY clHY plHY tccHY 
     varvect=clHY[index[1],:]./plHY[index[1],:]
     spline=Spline1D(sort(reverse(avHY[index[1],:])),reverse(varvect))
     scatter!(p,[average_deg_quantile[end]], [evaluate(spline,average_deg_quantile[end])],color=1,alpha=0.75,markersize=4,markerstrokewidth=0.6,markershape=:diamond, label=L"\mathrm{RTH}")
@@ -80,7 +75,7 @@ end
 
 function plot_euclidean(thresholds,velocities, average_deg_quantile, small_world_quantile,p)
     alld_euclidean=zeros(length(velocities),length(thresholds))
-    @load "/user/aurossi/home/mri_networks/hyperbolicbrains/optimization/euclidean_300_thre_02_005_098.jld2" avEU clEU plEU tccEU 
+    @load "../hyperbolicbrains/optimization/euclidean_300_thre_02_005_098.jld2" avEU clEU plEU tccEU 
     for i in 1:length(velocities)
             spline=Spline1D(sort(reverse(avEU[i,:])),reverse(clEU[i,:]./plEU[i,:]))
             splineorg=Spline1D(sort(reverse(average_deg_quantile[:])),reverse(small_world_quantile[2,:]))
@@ -90,19 +85,19 @@ function plot_euclidean(thresholds,velocities, average_deg_quantile, small_world
     end    
     for j in 1:length(thresholds)-1
         index_eu=argmin(alld_euclidean[:,j])
-        @load "/user/aurossi/home/mri_networks/hyperbolicbrains/optimization/euclidean_300_thre_02_005_098.jld2" avEU clEU plEU tccEU 
+        @load "../hyperbolicbrains/optimization/euclidean_300_thre_02_005_098.jld2" avEU clEU plEU tccEU 
         spline_eu=Spline1D(sort(reverse(avEU[index_eu,:])),reverse(clEU[index_eu,:]./plEU[index_eu,:]))
         scatter!(p,[average_deg_quantile[j]], [evaluate(spline_eu,average_deg_quantile[j])],color=5,alpha=0.75,markersize=4,markerstrokewidth=0.6,markershape=:rect,label="")
     end
     index_eu=argmin(alld_euclidean[:,end])
-    @load "/user/aurossi/home/mri_networks/hyperbolicbrains/optimization/euclidean_300_thre_02_005_098.jld2" avEU clEU plEU tccEU 
+    @load "../hyperbolicbrains/optimization/euclidean_300_thre_02_005_098.jld2" avEU clEU plEU tccEU 
     spline_eu=Spline1D(sort(reverse(avEU[index_eu,:])),reverse(clEU[index_eu,:]./plEU[index_eu,:]))
     scatter!(p,[average_deg_quantile[end]], [evaluate(spline_eu,average_deg_quantile[end])],color=5,alpha=0.75,markersize=4,markerstrokewidth=0.6,markershape=:rect, label= L"\mathrm{RTT}")
 end
 
 function plot_euclideanBorder(thresholds,velocities,radiusRange, average_deg_quantile, small_world_quantile,p)
     alld_euclideanBorder=zeros(length(velocities),length(radiusRange))
-    @load "/user/aurossi/home/mri_networks/hyperbolicbrains/optimization/euclideanBorder_300_r_0_005_08.jld2" avEU clEU plEU tccEU 
+    @load "../hyperbolicbrains/optimization/euclideanBorder_300_r_0_005_08.jld2" avEU clEU plEU tccEU 
     for i in 1:length(velocities)
             spline=Spline1D(sort(avEU[i,:]),clEU[i,:]./plEU[i,:])
             splineorg=Spline1D(sort(reverse(average_deg_quantile[:])),reverse(small_world_quantile[2,:]))
@@ -112,12 +107,12 @@ function plot_euclideanBorder(thresholds,velocities,radiusRange, average_deg_qua
     end  
     for j in 1:length(radiusRange)-1
         index_euB=argmin(alld_euclideanBorder[:,j])
-        @load "/user/aurossi/home/mri_networks/hyperbolicbrains/optimization/euclideanBorder_300_r_0_005_08.jld2" avEU clEU plEU tccEU 
+        @load "../hyperbolicbrains/optimization/euclideanBorder_300_r_0_005_08.jld2" avEU clEU plEU tccEU 
         spline_euB=Spline1D(sort(avEU[index_euB,:]),clEU[index_euB,:]./plEU[index_euB,:])
         scatter!(p,[average_deg_quantile[j]], [evaluate(spline_euB,average_deg_quantile[j])],color=3,alpha=0.75,markersize=4,markerstrokewidth=0.6,markershape=:hexagon,label="")
     end 
     index_euB=argmin(alld_euclideanBorder[:,end])
-    @load "/user/aurossi/home/mri_networks/hyperbolicbrains/optimization/euclideanBorder_300_r_0_005_08.jld2" avEU clEU plEU tccEU 
+    @load "../hyperbolicbrains/optimization/euclideanBorder_300_r_0_005_08.jld2" avEU clEU plEU tccEU 
     spline_euB=Spline1D(sort(avEU[index_euB,:]),clEU[index_euB,:]./plEU[index_euB,:])
     scatter!(p,[average_deg_quantile[end]], [evaluate(spline_euB,average_deg_quantile[end])],color=3,alpha=0.75,markersize=4,markerstrokewidth=0.6,markershape=:hexagon,label=L"\mathrm{RTS}")
 end
@@ -140,7 +135,7 @@ function main()
     plot_hyperbolic(thresholds,velocities,αrange, average_deg_quantile, small_world_quantile, p)
     plot_euclidean(thresholds,velocities, average_deg_quantile, small_world_quantile,p)
     display(p)
-    savefig(p, "/user/aurossi/home/mri_networks/TemporalBrainNetworksCode/images/swEachThreshold.png")
+    savefig(p, "images/swEachThreshold.png")
 end
 
 main()

@@ -58,7 +58,7 @@ function load_hyperbolic_data(len_R=length(Rrange))
     small_world_HY = zeros(len_vel, len_R, len_α)
     small_world_SB_HY = zeros(len_vel, len_R, len_α)
     for a in 1:len_α
-        @load "/user/aurossi/home/mri_networks/hyperbolicbrains/optimization/hyperbolic_300_alpha_$(round(Int,αrange[a]*100))_R_05_05_14_v_01_01_09_correct.jld2" avHY clHY plHY tccHY
+        @load "../hyperbolicbrains/optimization/hyperbolic_300_alpha_$(round(Int,αrange[a]*100))_R_05_05_14_v_01_01_09_correct.jld2" avHY clHY plHY tccHY
         average_deg_HY[:, :, a] = avHY[:, :]
         clustering_HY[:, :, a] = clHY[:, :]
         path_len_HY[:, :, a] = plHY[:, :]
@@ -86,12 +86,12 @@ function compute_integral_hyperbolic(average_deg_quantile, average_deg_HY, varia
 end
 
 function load_euclidean_data()
-    @load "/user/aurossi/home/mri_networks/hyperbolicbrains/optimization/euclidean_300_thre_02_005_098.jld2" avEU clEU plEU tccEU
+    @load "../hyperbolicbrains/optimization/euclidean_300_thre_02_005_098.jld2" avEU clEU plEU tccEU
     return avEU, clEU, plEU, tccEU
 end
 
 function load_euclideanBorder_data()
-    @load "/user/aurossi/home/mri_networks/hyperbolicbrains/optimization/euclideanBorder_300_r_0_005_08.jld2" avEU clEU plEU tccEU
+    @load "../hyperbolicbrains/optimization/euclideanBorder_300_r_0_005_08.jld2" avEU clEU plEU tccEU
     return avEU, clEU, plEU, tccEU
 end
 
@@ -123,8 +123,6 @@ function find_minima_α_v(integral, αrange=collect(0.5:0.025:1.2), velocities=c
     return minimum_area, best_velocity, best_α, indices
 end
 
-
-
 function main()
     thresholds = append!(collect(0.2:0.05:0.90), collect(0.92:0.02:0.98))
     subjects = readdlm("src/filtered-subjects-mod.txt", Int)
@@ -154,7 +152,6 @@ function main()
     println("Best velocity euclidean border: ", best_velocity)
     println("Indices euclidean border: ", indices)
 end
-#CHANGE AND COMPUTE ONLY THINGS FOR SW
 
 function myplot()
     subjects= readdlm("src/filtered-subjects-mod.txt", Int)
