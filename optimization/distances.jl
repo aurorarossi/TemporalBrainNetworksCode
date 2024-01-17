@@ -207,14 +207,15 @@ function compute_norm(p,average_deg_MOD, measure_MOD, average_fMRI, measure_fMRI
     spline_fMRI = linear_interpolation(sort(average_fMRI), measure_fMRI[sortperm(average_fMRI)])
     x = spline(range) .- spline_fMRI(range)
     if abs.(p) != Inf
-        return norm(x, p)./length(range)
+        return round(norm(x, p)./length(range),digits =5 )
     else
-        return norm(x, p)
+        return round(norm(x, p), digits = 5)
     end
 end
 
 
 #small worldness SB
+# norm minimum 
 p =  2
 println("Norm p = ", p)
 println("SWSB")
