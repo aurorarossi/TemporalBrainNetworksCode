@@ -1,7 +1,7 @@
 using NPZ, Random, Distributions,LinearAlgebra,Permutations,Plots,JLD2, DelimitedFiles
 
-include("permutatedModelsStruct.jl")
-include("measuresStruct.jl")
+include("../src/permutatedModelsStruct.jl")
+include("../src/measuresStruct.jl")
 
 abstract type TemporalNetwork end
 
@@ -13,7 +13,7 @@ end
 
 
 thresholds=append!(collect(0.2:0.05:0.90),collect(0.92:0.02:0.98))
-subjects=readdlm("/user/aurossi/home/mri_networks/hyperbolicbrains/src/filtered-subjects.txt",Int)
+subjects=readdlm("../src/filtered-subjects.txt",Int)
 
 for subject in subjects
     avRT=zeros(size(thresholds)[1])
@@ -50,6 +50,5 @@ for subject in subjects
 
             end
         end
-    @save "/data/Hyperbrain/$(subject)/$(subject)_schaefer_300_thre_02_005_098_permuted_ws60_wo30.jld2" avRT clRT plRT tccRT avRE clRE plRE tccRE
-    println("$(subject)")
+    @save "/data/$(subject)/$(subject)_schaefer_300_thre_02_005_098_permuted_ws60_wo30.jld2" avRT clRT plRT tccRT avRE clRE plRE tccRE
 end
